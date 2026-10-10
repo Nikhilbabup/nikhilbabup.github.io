@@ -28,6 +28,7 @@
     <p class="lead">A native employee-activity monitoring app used by 300+ people at Webandcrafts.</p>
     <div class="meta"><span>Webandcrafts</span><span>Electron.js desktop app</span><span>300+ daily users</span></div>
   </div>
+  <canvas id="scene" width="320" height="120" data-scene="timez" aria-hidden="true"></canvas>
 </header>
 
 <main>
@@ -66,5 +67,6 @@
 
 <footer>© <span id="yr"></span> Nikhil Babu P · Thrissur, Kerala</footer>
 <script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+<script src="scene.js"></script>
 </body>
 </html>

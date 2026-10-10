@@ -11,9 +11,17 @@ body {
 a { color: inherit; text-decoration: none; }
 
 .hero {
+  position: relative; overflow: hidden;
   max-width: 1200px; width: calc(100% - 32px); margin: 16px auto 0;
-  background: var(--mint); border-radius: 14px; padding: 0 0 56px;
+  background: var(--mint); border-radius: 14px;
+  padding-bottom: calc(min(100vw - 32px, 1200px) * 0.25);
 }
+#scene {
+  position: absolute; left: 0; bottom: 0; width: 100%; height: auto;
+  image-rendering: pixelated; pointer-events: none;
+}
+nav, .hero-content { position: relative; z-index: 1; }
+@media (max-width: 760px) { .hero { padding-bottom: calc((100vw - 32px) * 0.34); } }
 nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 24px; }
 .brand { font-weight: 500; font-size: 13px; }
 .back { font-size: 12.5px; }

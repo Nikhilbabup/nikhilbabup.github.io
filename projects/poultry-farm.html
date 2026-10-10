@@ -28,6 +28,7 @@
     <p class="lead">A Flutter app I built to run my own poultry farm: flock count, mortality, daily egg production, orders, income, expenses, feed purchases and reports.</p>
     <div class="meta"><span>Personal project</span><span>Flutter mobile app</span><span>45 → 200 birds</span></div>
   </div>
+  <canvas id="scene" width="320" height="120" data-scene="poultry-farm" aria-hidden="true"></canvas>
 </header>
 
 <main>
@@ -68,5 +69,6 @@
 
 <footer>© <span id="yr"></span> Nikhil Babu P · Thrissur, Kerala</footer>
 <script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+<script src="scene.js"></script>
 </body>
 </html>
