@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Logos Learning · Nikhil Babu P</title>
+<meta name="description" content="A marketplace where students hire tutors for specific subjects and book sessions online or in person.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Logos Learning · Nikhil Babu P">
+<meta property="og:description" content="A marketplace where students hire tutors for specific subjects and book sessions online or in person.">
+<meta name="theme-color" content="#d3e6de">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="project.css">
+</head>
+<body>
+
+<header class="hero">
+  <nav>
+    <a href="../index.html#projects" class="back">← All projects</a>
+    <a href="../index.html" class="brand">Nikhil Babu P</a>
+    <a class="pill" href="../index.html#contact">Contact →</a>
+  </nav>
+  <div class="hero-content">
+    <div class="eyebrow">Tutoring marketplace</div>
+    <h1>Logos Learning</h1>
+    <p class="lead">A marketplace where students hire tutors for specific subjects and book sessions online or in person.</p>
+    <div class="meta"><span>Webandcrafts</span><span>Backend &amp; APIs</span><span>Marketplace</span></div>
+  </div>
+</header>
+
+<main>
+  <section class="card">
+    <h2>The problem</h2>
+    <p>Students needed one place to find tutors for a subject, check that the tutors are vetted, and book sessions around tutor availability, over video or in person. Tutors needed to get paid.</p>
+  </section>
+  <section class="card">
+    <h2>What I built</h2>
+    <ul class="dots">
+        <li>Availability-based session booking.</li>
+        <li>Video sessions through Dyte.</li>
+        <li>Tutor background checks through Checkr.</li>
+        <li>Payments through PayPal and Authorize.net.</li>
+        <li>Real-time updates over Socket.IO.</li>
+        <li>The admin panel APIs for tutor and student management and tutor payouts.</li>
+    </ul>
+  </section>
+  <section class="card">
+    <h2>Tech stack</h2>
+    <div class="tags"><span>Node.js</span><span>TypeScript</span><span>Adonis.js</span><span>MongoDB</span><span>AWS</span><span>Socket.IO</span><span>Dyte</span><span>Checkr</span><span>PayPal</span><span>Authorize.net</span></div>
+  </section>
+
+  <div class="pager">
+    <a href="timez.html"><small>← Previous</small>Timez</a>
+    <a class="next" href="trinity-solar.html"><small>Next →</small>Trinity Solar Portal</a>
+  </div>
+</main>
+
+<footer>© <span id="yr"></span> Nikhil Babu P · Thrissur, Kerala</footer>
+<script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+</body>
+</html>

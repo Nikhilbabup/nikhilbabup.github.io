@@ -145,11 +145,9 @@
   .project .top canvas { width: 28px; image-rendering: pixelated; }
   .project h3 { font-size: 16px; font-weight: 700; }
   .project .sub { font-size: 12px; color: var(--coral); margin-bottom: 10px; }
-  .project p { color: var(--muted); font-size: 14px; }
-  .cs { display: grid; gap: 8px; margin-top: 12px; flex: 1; }
-  .cs div { display: grid; grid-template-columns: 76px 1fr; gap: 10px; font-size: 14px; color: var(--muted); }
-  .cs dt { color: var(--ink); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; padding-top: 2px; }
-  @media (max-width: 480px) { .cs div { grid-template-columns: 1fr; gap: 0; } }
+  .project p { color: var(--muted); font-size: 14px; flex: 1; }
+  .project .more { margin-top: 16px; font-size: 12.5px; font-weight: 500; color: var(--coral); }
+  .project:hover .more { text-decoration: underline; }
   .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
   .tags span { background: var(--chip); color: #2f5a4f; font-size: 12.5px; padding: 3px 10px; border-radius: 999px; }
 
@@ -207,7 +205,7 @@
     <div class="hello">Hi, I'm <b>Nikhil</b> — Software Engineer</div>
     <h1>Where Clean Code<br>Meets Calm Systems.</h1>
     <p class="lead">
-      I build steady, scalable backends, secure payment services and cross-platform desktop apps,
+      I build steady, scalable backends, secure payment services and cross-platform desktop and mobile apps,
       with Node.js, TypeScript and AWS. I'm a quick self-learner and always curious about what's next.
     </p>
 
@@ -249,7 +247,7 @@
   <h2>Where I've Worked</h2>
   <div class="timeline">
     <article class="card job">
-      <div class="job-head"><h3>Associate Software Engineer</h3><span class="when">Jun 2023 — Present</span></div>
+      <div class="job-head"><h3>Associate Software Engineer</h3><span class="when">Jun 2023 — Dec 2025</span></div>
       <div class="org">Webandcrafts · Koratty, Kerala</div>
       <ul class="dots">
         <li>Designed and implemented secure payment services and integrated third-party APIs, with a focus on compliance and scalability.</li>
@@ -273,30 +271,41 @@
   <div class="eyebrow">Projects</div>
   <h2>Things I've Built</h2>
   <div class="grid">
-    <article class="card project">
+    <a class="card project" href="projects/poultry-farm.html">
+      <div class="top"><canvas data-sprite="hen"></canvas><h3>Poultry Farm Manager</h3></div>
+      <div class="sub">Personal project · Flutter mobile app</div>
+      <p>Built to run my own poultry farm as it grew from 45 to 200 chickens: flock count, mortality, egg logs, orders, finances, feed and reports.</p>
+      <div class="tags"><span>Flutter</span><span>Dart</span></div>
+      <span class="more">Read case study →</span>
+    </a>
+    <a class="card project" href="projects/timez.html">
       <div class="top"><canvas data-sprite="monitor"></canvas><h3>Timez</h3></div>
       <div class="sub">Desktop app · Mac / Windows / Linux</div>
-      <dl class="cs"><div><dt>Problem</dt><dd>Webandcrafts needed native employee-activity tracking on Mac, Windows and Linux.</dd></div><div><dt>Built</dt><dd>Real-time time sync, system tray and timer, sleep handling, behaviour logging with electron-log, and per-user cron scheduling.</dd></div><div><dt>Result</dt><dd>300+ daily users; ~70% less server load after the scheduling change.</dd></div></dl>
+      <p>Employee-activity monitoring app used daily by 300+ people; ~70% less server load after a scheduling redesign.</p>
       <div class="tags"><span>Electron.js</span><span>Node.js</span><span>electron-log</span></div>
-    </article>
-    <article class="card project">
+      <span class="more">Read case study →</span>
+    </a>
+    <a class="card project" href="projects/logos-learning.html">
       <div class="top"><canvas data-sprite="book"></canvas><h3>Logos Learning</h3></div>
       <div class="sub">Tutoring marketplace</div>
-      <dl class="cs"><div><dt>Problem</dt><dd>Students needed to find, vet and book tutors for specific subjects, online or in person.</dd></div><div><dt>Built</dt><dd>Availability-based booking, video sessions (Dyte), background checks (Checkr), payments (PayPal, Authorize.net), real-time updates over Socket.IO, and the admin and payout APIs.</dd></div></dl>
-      <div class="tags"><span>Node.js</span><span>TypeScript</span><span>Adonis.js</span><span>MongoDB</span><span>AWS</span><span>Socket.IO</span><span>Dyte</span><span>Checkr</span><span>PayPal</span><span>Authorize.net</span></div>
-    </article>
-    <article class="card project">
+      <p>Students find vetted tutors and book sessions online or in person, with payments and real-time updates.</p>
+      <div class="tags"><span>Node.js</span><span>TypeScript</span><span>Adonis.js</span><span>MongoDB</span><span>+6</span></div>
+      <span class="more">Read case study →</span>
+    </a>
+    <a class="card project" href="projects/trinity-solar.html">
       <div class="top"><canvas data-sprite="sun"></canvas><h3>Trinity Solar Portal</h3></div>
       <div class="sub">Customer portal</div>
-      <dl class="cs"><div><dt>Problem</dt><dd>Solar customers needed one place to manage their energy systems.</dd></div><div><dt>Built</dt><dd>Customer portal APIs with JWT authentication and Twilio SMS notifications.</dd></div></dl>
-      <div class="tags"><span>Node.js</span><span>TypeScript</span><span>Adonis.js</span><span>Lucid ORM</span><span>Twilio</span><span>JWT</span></div>
-    </article>
-    <article class="card project">
+      <p>A portal where customers manage their solar energy systems, with SMS notifications and JWT auth.</p>
+      <div class="tags"><span>Node.js</span><span>TypeScript</span><span>Adonis.js</span><span>Lucid ORM</span><span>+2</span></div>
+      <span class="more">Read case study →</span>
+    </a>
+    <a class="card project" href="projects/pravega.html">
       <div class="top"><canvas data-sprite="card"></canvas><h3>Pravega</h3></div>
       <div class="sub">Payment switch middleware</div>
-      <dl class="cs"><div><dt>Problem</dt><dd>ATMs and POS terminals have to reach payment switches and card management systems reliably.</dd></div><div><dt>Built</dt><dd>Queue-based transaction processing on BullMQ and Redis.</dd></div><div><dt>Result</dt><dd>Found and fixed a critical packet-splitting bug that improved transaction processing speed.</dd></div></dl>
-      <div class="tags"><span>Node.js</span><span>TypeScript</span><span>Express.js</span><span>BullMQ</span><span>Redis</span><span>MSSQL</span></div>
-    </article>
+      <p>Connects ATMs and POS terminals to payment switches, using queue-based transaction processing.</p>
+      <div class="tags"><span>Node.js</span><span>TypeScript</span><span>Express.js</span><span>BullMQ</span><span>+2</span></div>
+      <span class="more">Read case study →</span>
+    </a>
   </div>
 </section>
 
@@ -306,11 +315,11 @@
   <div class="skills">
     <div class="card">
       <h3>Languages &amp; Tech</h3>
-      <div class="tags"><span>Node.js</span><span>TypeScript</span><span>GraphQL</span><span>React.js</span><span>Socket.IO</span><span>Microservices</span></div>
+      <div class="tags"><span>Node.js</span><span>TypeScript</span><span>Dart</span><span>GraphQL</span><span>React.js</span><span>Socket.IO</span><span>Microservices</span></div>
     </div>
     <div class="card">
       <h3>Frameworks</h3>
-      <div class="tags"><span>Express.js</span><span>Adonis.js</span><span>Nest.js</span><span>Electron.js</span></div>
+      <div class="tags"><span>Express.js</span><span>Adonis.js</span><span>Nest.js</span><span>Electron.js</span><span>Flutter</span></div>
     </div>
     <div class="card">
       <h3>Databases</h3>
@@ -399,6 +408,9 @@ const SPRITES = {
   book: { pal: { d: C.ink, l: '#5d6f6a', w: C.white, r: C.red }, rows: [
     '.ddddddddd', 'dlllllllld', 'dlwwwwwwld', 'dlllllllld', 'dlwwwwwlld',
     'dlllllllld', 'dlllllllrd', 'dlllllllrd', 'dddddddddd'] },
+  hen: { pal: { w: C.white, r: C.red, y: C.gold, k: C.ink, s: '#d8d2c6' }, rows: [
+    '...rr.......', '..krrk......', '.kwwwwk.....', 'ykwkwwk..kk.', '.kwwwwk.kwwk', '..kwwwwkwwwk',
+    '..kwwswwwwk.', '..kwssswwwk.', '...kwwwwwk..', '....kkkkk...', '.....y.y....', '....yy.yy...'] },
   sun: { pal: { y: C.gold, o: '#f2c46b', d: C.ink }, rows: [
     '....y.....', '.y..y..y..', '..yyyyy...', '.yyooooyy.', 'yyoooooyyy',
     '.yyooooyy.', '..yyyyy...', '.y..y..y..', '....y.....'] }

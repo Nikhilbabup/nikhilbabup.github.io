@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Timez · Nikhil Babu P</title>
+<meta name="description" content="A native employee-activity monitoring app used by 300+ people at Webandcrafts.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Timez · Nikhil Babu P">
+<meta property="og:description" content="A native employee-activity monitoring app used by 300+ people at Webandcrafts.">
+<meta name="theme-color" content="#d3e6de">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="project.css">
+</head>
+<body>
+
+<header class="hero">
+  <nav>
+    <a href="../index.html#projects" class="back">← All projects</a>
+    <a href="../index.html" class="brand">Nikhil Babu P</a>
+    <a class="pill" href="../index.html#contact">Contact →</a>
+  </nav>
+  <div class="hero-content">
+    <div class="eyebrow">Desktop app · Mac / Windows / Linux</div>
+    <h1>Timez</h1>
+    <p class="lead">A native employee-activity monitoring app used by 300+ people at Webandcrafts.</p>
+    <div class="meta"><span>Webandcrafts</span><span>Electron.js desktop app</span><span>300+ daily users</span></div>
+  </div>
+</header>
+
+<main>
+  <section class="card">
+    <h2>The problem</h2>
+    <p>Webandcrafts needed native employee-activity tracking that runs reliably on Mac, Windows and Linux, keeps accurate time, and doesn&#x27;t lose data when a machine sleeps or shuts down unexpectedly.</p>
+  </section>
+  <section class="card">
+    <h2>What I built</h2>
+    <ul class="dots">
+        <li>Real-time time sync between the app and the server.</li>
+        <li>System tray integration and the in-app timer.</li>
+        <li>Sleep handling, so tracking pauses and resumes correctly when a machine sleeps.</li>
+        <li>Application behaviour logging with electron-log.</li>
+        <li>Per-user cron scheduling for background jobs.</li>
+        <li>A recovery mechanism that preserves user data through unexpected shutdowns and crashes.</li>
+    </ul>
+  </section>
+    <section class="card">
+      <h2>Results</h2>
+      <ul class="dots">
+        <li>Used daily by 300+ people.</li>
+        <li>Per-user cron scheduling cut server load by ~70% and improved stability.</li>
+      </ul>
+    </section>
+  <section class="card">
+    <h2>Tech stack</h2>
+    <div class="tags"><span>Electron.js</span><span>Node.js</span><span>electron-log</span></div>
+  </section>
+
+  <div class="pager">
+    <a href="poultry-farm.html"><small>← Previous</small>Poultry Farm Manager</a>
+    <a class="next" href="logos-learning.html"><small>Next →</small>Logos Learning</a>
+  </div>
+</main>
+
+<footer>© <span id="yr"></span> Nikhil Babu P · Thrissur, Kerala</footer>
+<script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pravega · Nikhil Babu P</title>
+<meta name="description" content="Middleware that connects ATMs and point-of-sale systems to payment switches and card management systems.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pravega · Nikhil Babu P">
+<meta property="og:description" content="Middleware that connects ATMs and point-of-sale systems to payment switches and card management systems.">
+<meta name="theme-color" content="#d3e6de">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="project.css">
+</head>
+<body>
+
+<header class="hero">
+  <nav>
+    <a href="../index.html#projects" class="back">← All projects</a>
+    <a href="../index.html" class="brand">Nikhil Babu P</a>
+    <a class="pill" href="../index.html#contact">Contact →</a>
+  </nav>
+  <div class="hero-content">
+    <div class="eyebrow">Payment switch middleware</div>
+    <h1>Pravega</h1>
+    <p class="lead">Middleware that connects ATMs and point-of-sale systems to payment switches and card management systems.</p>
+    <div class="meta"><span>Applied Payments</span><span>Payments infrastructure</span><span>ATM / POS</span></div>
+  </div>
+</header>
+
+<main>
+  <section class="card">
+    <h2>The problem</h2>
+    <p>ATMs and POS terminals must reach payment switches and card management systems reliably and quickly. Every transaction is real money, so dropped or slow messages are not acceptable.</p>
+  </section>
+  <section class="card">
+    <h2>What I built</h2>
+    <ul class="dots">
+        <li>Queue-based, high-throughput transaction processing on BullMQ and Redis.</li>
+        <li>Found and fixed a critical packet-splitting issue in transaction message handling.</li>
+    </ul>
+  </section>
+    <section class="card">
+      <h2>Results</h2>
+      <ul class="dots">
+        <li>The packet-splitting fix improved overall transaction processing speed.</li>
+      </ul>
+    </section>
+  <section class="card">
+    <h2>Tech stack</h2>
+    <div class="tags"><span>Node.js</span><span>TypeScript</span><span>Express.js</span><span>BullMQ</span><span>Redis</span><span>MSSQL</span></div>
+  </section>
+
+  <div class="pager">
+    <a href="trinity-solar.html"><small>← Previous</small>Trinity Solar Portal</a>
+    <a class="next" href="poultry-farm.html"><small>Next →</small>Poultry Farm Manager</a>
+  </div>
+</main>
+
+<footer>© <span id="yr"></span> Nikhil Babu P · Thrissur, Kerala</footer>
+<script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+</body>
+</html>
