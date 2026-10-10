@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nikhil Babu P</title>
+<meta name="description" content="Nikhil Babu P — Software Engineer building calm, reliable backend systems, payment services and desktop apps.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #eef4f0;
+    --mint: #d3e6de;
+    --ink: #173f37;
+    --muted: #4f6b64;
+    --coral: #e8625a;
+    --coral-d: #cf4f47;
+    --card: #f9fbf8;
+    --line: #c8dcd2;
+    --chip: #dcebe4;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ---------- Hero card ---------- */
+  .hero {
+    position: relative;
+    max-width: 1200px;
+    margin: 16px auto 0;
+    width: calc(100% - 32px);
+    background: var(--mint);
+    border-radius: 14px;
+    overflow: hidden;
+    padding-bottom: calc(min(100vw - 32px, 1200px) * 0.23);
+  }
+  #scene {
+    position: absolute; left: 0; bottom: 0;
+    width: 100%; height: auto;
+    image-rendering: pixelated;
+    pointer-events: none;
+  }
+  nav {
+    position: relative; z-index: 2;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 24px; gap: 12px;
+  }
+  .brand { display: flex; align-items: center; gap: 8px; font-weight: 500; font-size: 13px; }
+  .brand canvas { width: 14px; image-rendering: pixelated; }
+  nav ul { display: flex; gap: 32px; list-style: none; font-size: 12.5px; }
+  nav ul a:hover { color: var(--coral); }
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--coral); color: #fff; border-radius: 999px;
+    padding: 8px 18px; font-size: 12.5px; font-weight: 500;
+    transition: background .2s, transform .2s;
+    border: 0; cursor: pointer; font-family: inherit;
+  }
+  .pill:hover { background: var(--coral-d); transform: translateY(-1px); }
+  .pill.ghost { background: #f4f8f5; color: var(--ink); }
+  .pill.ghost:hover { background: #fff; }
+  .pill.lg { padding: 11px 24px; font-size: 13px; }
+
+  .hero-content {
+    position: relative; z-index: 1;
+    text-align: center; padding: 40px 16px 0;
+    max-width: 760px; margin: 0 auto;
+  }
+  .hello { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
+  .hello b { color: var(--coral); font-weight: 500; }
+  h1 {
+    font-size: clamp(30px, 5.2vw, 50px); font-weight: 800;
+    line-height: 1.22; letter-spacing: -0.01em;
+  }
+  .lead { max-width: 560px; margin: 22px auto 0; color: var(--muted); font-size: 13px; }
+
+  .features {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
+    margin: 40px auto 0; max-width: 680px;
+  }
+  .feature canvas { width: 30px; image-rendering: pixelated; display: block; margin: 0 auto 10px; }
+  .feature h3 { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .feature p { font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .hero .cta { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
+
+  @media (max-width: 760px) {
+    nav ul { display: none; }
+    .features { grid-template-columns: 1fr; gap: 20px; max-width: 320px; }
+    .hero { padding-bottom: calc((100vw - 32px) * 0.34); }
+  }
+
+  /* ---------- Sections ---------- */
+  .section { max-width: 1000px; margin: 0 auto; padding: 88px 16px 0; }
+  .eyebrow { text-align: center; color: var(--coral); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; }
+  .section h2 { text-align: center; font-size: clamp(24px, 3.6vw, 34px); font-weight: 800; margin: 6px 0 40px; }
+
+  .stats {
+    max-width: 1000px; margin: 0 auto; padding: 40px 16px 0;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  }
+  .stat { background: var(--card); border: 2px solid var(--line); border-radius: 12px; padding: 18px 20px; text-align: center; }
+  .stat b { display: block; font-size: 28px; font-weight: 800; color: var(--coral); }
+  .stat span { font-size: 12px; color: var(--muted); }
+  @media (max-width: 600px) { .stats { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--card); border: 2px solid var(--line); border-radius: 12px;
+    padding: 24px; transition: border-color .2s, transform .2s, box-shadow .2s;
+  }
+  .card:hover { border-color: var(--coral); transform: translateY(-3px); box-shadow: 0 6px 0 var(--line); }
+
+  /* Experience */
+  .timeline { display: grid; gap: 20px; }
+  .job-head { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 16px; margin-bottom: 4px; }
+  .job h3 { font-size: 16px; font-weight: 700; }
+  .when { font-size: 12px; color: #fff; background: var(--ink); border-radius: 999px; padding: 2px 12px; align-self: flex-start; }
+  .org { color: var(--muted); font-size: 13px; margin-bottom: 14px; }
+  ul.dots { list-style: none; display: grid; gap: 8px; }
+  ul.dots li { position: relative; padding-left: 20px; color: var(--muted); font-size: 13px; }
+  ul.dots li::before {
+    content: ""; position: absolute; left: 0; top: 8px; width: 7px; height: 7px; background: var(--coral);
+  }
+
+  /* Projects */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 20px; }
+  .project { display: flex; flex-direction: column; }
+  .project .top { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+  .project .top canvas { width: 28px; image-rendering: pixelated; }
+  .project h3 { font-size: 16px; font-weight: 700; }
+  .project .sub { font-size: 12px; color: var(--coral); margin-bottom: 10px; }
+  .project p { color: var(--muted); font-size: 13px; flex: 1; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+  .tags span { background: var(--chip); color: #2f5a4f; font-size: 11.5px; padding: 3px 10px; border-radius: 999px; }
+
+  /* Skills */
+  .skills { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 20px; }
+  .skills h3 { font-size: 14px; margin-bottom: 4px; }
+  .skills .tags span { font-size: 12.5px; padding: 4px 12px; }
+
+  /* Education */
+  .edu { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 20px; }
+  .edu h3 { font-size: 15px; }
+  .edu p { color: var(--muted); font-size: 13px; }
+  .edu .when { display: inline-block; margin-top: 12px; }
+
+  /* Contact */
+  .contact {
+    max-width: 1200px; width: calc(100% - 32px); margin: 96px auto 0;
+    background: var(--mint); border-radius: 14px; text-align: center;
+    padding: 64px 20px; position: relative; overflow: hidden;
+  }
+  .contact h2 { margin-bottom: 14px; }
+  .contact p { color: var(--muted); max-width: 520px; margin: 0 auto 28px; font-size: 13px; }
+  .links { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 28px; }
+  .links a {
+    background: #f4f8f5; border-radius: 999px; padding: 8px 18px; font-size: 12.5px;
+    overflow-wrap: anywhere; transition: color .2s;
+  }
+  .links a:hover { color: var(--coral); }
+
+  footer { text-align: center; color: var(--muted); font-size: 12px; padding: 28px 16px 36px; }
+
+  .reveal { opacity: 0; transform: translateY(14px); transition: opacity .7s, transform .7s; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero" id="top">
+  <nav>
+    <a href="#top" class="brand"><canvas data-sprite="tree"></canvas>Nikhil Babu P</a>
+    <ul>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a class="pill" href="#contact">Hire Me →</a>
+  </nav>
+
+  <div class="hero-content">
+    <div class="hello">Hi, I'm <b>Nikhil</b> — Software Engineer</div>
+    <h1>Where Clean Code<br>Meets Calm Systems.</h1>
+    <p class="lead">
+      I build steady, scalable backends, secure payment services and cross-platform desktop apps,
+      with Node.js, TypeScript and AWS. I'm a quick self-learner and always curious about what's next.
+    </p>
+
+    <div class="features">
+      <div class="feature">
+        <canvas data-sprite="server"></canvas>
+        <h3>Backend &amp; APIs</h3>
+        <p>Node.js, Nest, Adonis and Express services built to scale.</p>
+      </div>
+      <div class="feature">
+        <canvas data-sprite="card"></canvas>
+        <h3>Payment Systems</h3>
+        <p>Secure payment flows, gateways and ATM/POS switching.</p>
+      </div>
+      <div class="feature">
+        <canvas data-sprite="monitor"></canvas>
+        <h3>Desktop Apps</h3>
+        <p>Electron.js apps for Mac, Windows and Linux.</p>
+      </div>
+    </div>
+
+    <div class="cta">
+      <a class="pill lg" href="#projects">See My Work →</a>
+      <a class="pill ghost lg" href="#contact">Get in Touch</a>
+    </div>
+  </div>
+
+  <canvas id="scene" width="320" height="120" aria-hidden="true"></canvas>
+</header>
+
+<div class="stats reveal">
+  <div class="stat"><b>4+ yrs</b><span>building production software</span></div>
+  <div class="stat"><b>~70%</b><span>server load cut with per-user cron scheduling</span></div>
+  <div class="stat"><b>300+</b><span>daily users on the Timez desktop app</span></div>
+</div>
+
+<section class="section reveal" id="experience">
+  <div class="eyebrow">Experience</div>
+  <h2>Where I've Worked</h2>
+  <div class="timeline">
+    <article class="card job">
+      <div class="job-head"><h3>Associate Software Engineer</h3><span class="when">Jun 2023 — Present</span></div>
+      <div class="org">Webandcrafts · Koratty, Kerala</div>
+      <ul class="dots">
+        <li>Designed and implemented secure payment services and integrated third-party APIs, with a focus on compliance and scalability.</li>
+        <li>Built a per-user cron scheduling system for a desktop app that reduced server load by ~70%, improving performance and stability.</li>
+        <li>Developed a data protection mechanism that handles unexpected shutdowns and safeguards 98%+ of user data.</li>
+        <li>Implemented the Logos Learning admin panel APIs for managing tutor and student details and payouts; the client was fully satisfied with the result.</li>
+      </ul>
+    </article>
+    <article class="card job">
+      <div class="job-head"><h3>Jr. Software Payment Engineer</h3><span class="when">Aug 2022 — Jun 2023</span></div>
+      <div class="org">Applied Payments · Kakkanad, Kerala</div>
+      <ul class="dots">
+        <li>Implemented the Naiguata payment interface, enabling seamless international transaction processing.</li>
+        <li>Optimised transaction processing in Pravega by resolving a critical packet-splitting issue, improving overall processing speed.</li>
+      </ul>
+    </article>
+  </div>
+</section>
+
+<section class="section reveal" id="projects">
+  <div class="eyebrow">Projects</div>
+  <h2>Things I've Built</h2>
+  <div class="grid">
+    <article class="card project">
+      <div class="top"><canvas data-sprite="monitor"></canvas><h3>Timez</h3></div>
+      <div class="sub">Desktop app · Mac / Windows / Linux</div>
+      <p>A native employee-activity monitoring app for Webandcrafts, used by 300+ people. I built real-time time sync, the system tray, the timer, sleep handling, and application behaviour logging with electron-log.</p>
+      <div class="tags"><span>Electron.js</span><span>Node.js</span><span>electron-log</span></div>
+    </article>
+    <article class="card project">
+      <div class="top"><canvas data-sprite="book"></canvas><h3>Logos Learning</h3></div>
+      <div class="sub">Tutoring marketplace</div>
+      <p>Students hire tutors for specific subjects and book sessions based on tutor availability, either over video chat or in person. It includes background checks, payments and real-time updates.</p>
+      <div class="tags"><span>Node.js</span><span>TypeScript</span><span>Adonis.js</span><span>MongoDB</span><span>AWS</span><span>Socket.IO</span><span>Dyte</span><span>Checkr</span><span>PayPal</span><span>Authorize.net</span></div>
+    </article>
+    <article class="card project">
+      <div class="top"><canvas data-sprite="sun"></canvas><h3>Trinity Solar Portal</h3></div>
+      <div class="sub">Customer portal</div>
+      <p>A portal where customers manage their solar energy systems, with SMS notifications through Twilio and JWT-based authentication.</p>
+      <div class="tags"><span>Node.js</span><span>TypeScript</span><span>Adonis.js</span><span>Lucid ORM</span><span>Twilio</span><span>JWT</span></div>
+    </article>
+    <article class="card project">
+      <div class="top"><canvas data-sprite="card"></canvas><h3>Pravega</h3></div>
+      <div class="sub">Payment switch middleware</div>
+      <p>Software that connects ATMs and point-of-sale systems to payment switches and card management systems, using queue-based, high-throughput transaction processing.</p>
+      <div class="tags"><span>Node.js</span><span>TypeScript</span><span>Express.js</span><span>BullMQ</span><span>Redis</span><span>MSSQL</span></div>
+    </article>
+  </div>
+</section>
+
+<section class="section reveal" id="skills">
+  <div class="eyebrow">Toolkit</div>
+  <h2>Skills</h2>
+  <div class="skills">
+    <div class="card">
+      <h3>Languages &amp; Tech</h3>
+      <div class="tags"><span>Node.js</span><span>TypeScript</span><span>SQL</span><span>NoSQL</span><span>GraphQL</span><span>React.js</span><span>HTML</span><span>CSS</span><span>Socket.IO</span><span>Microservices</span></div>
+    </div>
+    <div class="card">
+      <h3>Frameworks</h3>
+      <div class="tags"><span>Express.js</span><span>Adonis.js</span><span>Nest.js</span><span>Electron.js</span></div>
+    </div>
+    <div class="card">
+      <h3>Databases</h3>
+      <div class="tags"><span>MongoDB</span><span>MySQL</span><span>PostgreSQL</span><span>Redis</span></div>
+    </div>
+    <div class="card">
+      <h3>Cloud &amp; Tools</h3>
+      <div class="tags"><span>AWS</span><span>Git</span><span>BullMQ</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section reveal" id="education">
+  <div class="eyebrow">Education</div>
+  <h2>Where I Learned</h2>
+  <div class="edu">
+    <div class="card">
+      <h3>Bachelor of Computer Science</h3>
+      <p>Universal Engineering College</p>
+      <span class="when">2019 — 2022</span>
+    </div>
+    <div class="card">
+      <h3>Diploma in Computer Engineering</h3>
+      <p>Maharaja's Technological Institute</p>
+      <span class="when">2015 — 2018</span>
+    </div>
+  </div>
+</section>
+
+<section class="contact reveal" id="contact">
+  <div class="eyebrow">Contact</div>
+  <h2>Let's Build Something Calm.</h2>
+  <p>I'm open to backend, full-stack and payments engineering roles. Send a message and I'll get back to you.</p>
+  <a class="pill lg" href="mailto:nikhilbabupurakkal97@gmail.com">Say Hello →</a>
+  <div class="links">
+    <a href="mailto:nikhilbabupurakkal97@gmail.com">nikhilbabupurakkal97@gmail.com</a>
+    <a href="tel:+918078068633">+91 80780 68633</a>
+    <a href="https://linkedin.com/in/nikhilbabupurakkal/" target="_blank" rel="noopener">LinkedIn ↗</a>
+    <a href="https://github.com/Nikhilbabup" target="_blank" rel="noopener">GitHub ↗</a>
+  </div>
+</section>
+
+<footer>© <span id="yr"></span> Nikhil Babu P · Thrissur, Kerala</footer>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+/* ---------- Palette ---------- */
+const C = {
+  cloud: '#f6f3ea', cloudShade: '#e3e9e1', cloudHi: '#ffffff',
+  leafHi: '#cfe3c9', leafL: '#a9c9ad', leafM: '#7fa98e', leafD: '#557f6c', leafO: '#3f6656',
+  trunk: '#7a4c40', trunkL: '#9b6b5c',
+  grass: '#6f9f86', grassD: '#4e7f6b',
+  dirtL: '#c4a28f', dirt: '#a8786a', dirtD: '#6e443a',
+  water: '#93bab1', waterD: '#7fa69d', waterL: '#b6d3cb', waterHi: '#d6e8e2',
+  red: '#e0645a', pink: '#eaa5a0', white: '#f7f3ec', ink: '#2f3e3a',
+  grey: '#9aa09b', greyD: '#6b716c', line: '#56635f', gold: '#e8b04a', sky: '#8fb8b0'
+};
+
+function rng(seed) {
+  return () => {
+    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+    let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+const px = (g, x, y, c) => { g.fillStyle = c; g.fillRect(x | 0, y | 0, 1, 1); };
+
+/* ---------- Small pixel sprites ---------- */
+const SPRITES = {
+  tree: { pal: { g: C.leafD, l: C.leafM, t: C.trunk }, rows: [
+    '...g...', '..glg..', '..ggg..', '.gglgg.', '..ggg..', '.gglgg.', 'ggggggg', '...t...', '...t...'] },
+  server: { pal: { d: C.ink, l: '#e6f0eb', g: '#6fbf73', r: C.red }, rows: [
+    'dddddddddd', 'dllllllgld', 'dlddllllld', 'dddddddddd', 'dllllllrld', 'dlddllllld',
+    'dddddddddd', 'dllllllgld', 'dlddllllld', 'dddddddddd'] },
+  card: { pal: { r: C.red, d: C.ink, w: C.white, y: C.gold }, rows: [
+    '.rrrrrrrrrr.', 'rrrrrrrrrrrr', 'dddddddddddd', 'rrrrrrrrrrrr', 'ryyrrrrrrrrr',
+    'ryyrrrrrrrrr', 'rrrrrrwwwwrr', '.rrrrrrrrrr.'] },
+  monitor: { pal: { d: C.ink, b: C.sky, g: '#cfe3c9', w: C.white }, rows: [
+    'dddddddddddd', 'dbbbbbbbbbbd', 'dbwwbbbbbbbd', 'dbbbbbggbbbd', 'dbbbbggggbbd',
+    'dbggggggggbd', 'dddddddddddd', '.....dd.....', '...dddddd...'] },
+  book: { pal: { d: C.ink, l: '#5d6f6a', w: C.white, r: C.red }, rows: [
+    '.ddddddddd', 'dlllllllld', 'dlwwwwwwld', 'dlllllllld', 'dlwwwwwlld',
+    'dlllllllld', 'dlllllllrd', 'dlllllllrd', 'dddddddddd'] },
+  sun: { pal: { y: C.gold, o: '#f2c46b', d: C.ink }, rows: [
+    '....y.....', '.y..y..y..', '..yyyyy...', '.yyooooyy.', 'yyoooooyyy',
+    '.yyooooyy.', '..yyyyy...', '.y..y..y..', '....y.....'] }
+};
+function drawSprite(cv, name) {
+  const s = SPRITES[name];
+  cv.width = Math.max(...s.rows.map(r => r.length)); cv.height = s.rows.length;
+  const g = cv.getContext('2d');
+  s.rows.forEach((row, y) => [...row].forEach((ch, x) => { if (s.pal[ch]) px(g, x, y, s.pal[ch]); }));
+}
+document.querySelectorAll('canvas[data-sprite]').forEach(cv => drawSprite(cv, cv.dataset.sprite));
+
+/* ---------- Pond scene ---------- */
+const W = 320, H = 120, GROUND = 97, WATER = 102;
+const scene = document.getElementById('scene');
+const sg = scene.getContext('2d');
+const ISLANDS = [[4, 134], [186, 316]];
+
+function makeCloud(w, h, circles) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  const g = c.getContext('2d');
+  const inside = (x, y) => circles.some(([cx, cy, r]) => (x - cx) ** 2 + (y - cy) ** 2 < r * r);
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    if (!inside(x, y)) continue;
+    px(g, x, y, !inside(x, y + 3) ? C.cloudShade : !inside(x, y - 2) ? C.cloudHi : C.cloud);
+  }
+  return c;
+}
+const clouds = [
+  { c: makeCloud(110, 60, [[26, 40, 16], [50, 28, 22], [76, 32, 18], [96, 44, 12], [12, 48, 10], [60, 48, 16]]), x: 34, y: 42, spd: 0.0012 },
+  { c: makeCloud(130, 64, [[24, 44, 14], [52, 30, 24], [84, 26, 22], [108, 42, 15], [70, 50, 16]]), x: 150, y: 36, spd: 0.0009 },
+  { c: makeCloud(46, 22, [[12, 14, 8], [24, 10, 10], [36, 14, 7]]), x: 250, y: 18, spd: 0.002 }
+];
+
+function pine(g, r, cx, base, h) {
+  const trunkH = 7;
+  for (let y = base - trunkH; y < base; y++) {
+    px(g, cx - 1, y, C.trunkL); px(g, cx, y, C.trunk); px(g, cx + 1, y, C.trunk);
+  }
+  const top = base - trunkH - h + 3, tiers = 4, tl = h / tiers, maxHW = h * 0.27;
+  for (let i = 0; i < h; i++) {
+    const y = top + i, ti = Math.floor(i / tl), within = i - ti * tl;
+    const hw = Math.round((i / h) * maxHW * 0.55 + (within / tl) * maxHW * 0.45) + 1;
+    for (let dx = -hw; dx <= hw; dx++) {
+      const edge = Math.abs(dx) === hw;
+      if (edge && r() < 0.35) continue;
+      const v = dx / hw + (r() - 0.5) * 0.6;
+      let col = v < -0.45 ? C.leafL : v > 0.35 ? C.leafD : C.leafM;
+      if (within > tl - 1.6) col = r() < 0.7 ? C.leafD : C.leafO;
+      if (edge && r() < 0.5) col = C.leafO;
+      if (r() < 0.04) col = C.leafHi;
+      px(g, cx + dx, y, col);
+    }
+  }
+}
+
+const BUNNY = { pal: { w: C.white, p: C.pink, k: C.ink, r: C.red, s: '#d8d2c6' }, rows: [
+  '.w.w...', '.w.w...', '.p.p...', '.wwww..', 'wwwwws.', 'wkwwws.', 'wwwpws.',
+  '.wwws..', 'rrrrrw.', 'rrrrr..', 'rrrrs..', '.w.w...'] };
+
+function buildStatic() {
+  const c = document.createElement('canvas'); c.width = W; c.height = H;
+  const g = c.getContext('2d'), r = rng(42);
+  [[22, 56], [44, 44], [66, 50], [88, 34],
+   [200, 36], [222, 44], [246, 40], [270, 58], [296, 46]].forEach(([x, h]) => pine(g, r, x, GROUND, h));
+
+  ISLANDS.forEach(([a, b]) => {
+    for (let x = a; x <= b; x++) {
+      px(g, x, GROUND, C.grass);
+      px(g, x, GROUND + 1, C.dirtL);
+      px(g, x, GROUND + 2, C.dirt); px(g, x, GROUND + 3, C.dirt);
+      px(g, x, GROUND + 4, C.dirtD);
+      if (r() < 0.55) {
+        const th = 1 + Math.floor(r() * 3);
+        for (let k = 1; k <= th; k++) px(g, x, GROUND - k, k === th ? C.grassD : C.grass);
+      }
+    }
+    for (let y = GROUND; y <= GROUND + 4; y++) { px(g, a, y, C.dirtD); px(g, b, y, C.dirtD); }
+  });
+
+  // flowers
+  [12, 76, 194, 236, 306].forEach(x => {
+    px(g, x, GROUND - 1, C.grassD); px(g, x, GROUND - 2, C.grassD);
+    px(g, x - 1, GROUND - 3, C.red); px(g, x + 1, GROUND - 3, C.red);
+    px(g, x, GROUND - 4, C.red); px(g, x, GROUND - 3, C.pink);
+  });
+  // bucket
+  for (let y = 93; y < GROUND; y++) for (let x = 103; x <= 107; x++) px(g, x, y, y === 93 ? C.greyD : C.grey);
+  // bunny (outline first so it reads against the clouds)
+  const bx = 114, by = GROUND - BUNNY.rows.length;
+  const filled = (x, y) => BUNNY.pal[(BUNNY.rows[y] || '')[x]];
+  BUNNY.rows.forEach((row, y) => [...row].forEach((ch, x) => {
+    if (!filled(x, y)) return;
+    [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(([ox, oy]) => {
+      if (!filled(x + ox, y + oy) && by + y + oy < GROUND) px(g, bx + x + ox, by + y + oy, '#8c7f78');
+    });
+  }));
+  BUNNY.rows.forEach((row, y) => [...row].forEach((ch, x) => {
+    if (BUNNY.pal[ch]) px(g, 114 + x, GROUND - BUNNY.rows.length + y, BUNNY.pal[ch]);
+  }));
+  // fishing rod
+  let [x0, y0] = [119, 93]; const [x1, y1] = [147, 74];
+  const dx = Math.abs(x1 - x0), dy = -Math.abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+  let err = dx + dy;
+  while (true) {
+    px(g, x0, y0, C.trunk);
+    if (x0 === x1 && y0 === y1) break;
+    const e2 = 2 * err;
+    if (e2 >= dy) { err += dy; x0++; }
+    if (e2 <= dx) { err += dx; y0 += sy; }
+  }
+  return c;
+}
+const staticLayer = buildStatic();
+
+const wr = rng(9);
+const ripples = Array.from({ length: 46 }, () => ({
+  x: wr() * W, y: WATER + 2 + Math.floor(wr() * 17),
+  len: 2 + Math.floor(wr() * 6), spd: 0.002 + wr() * 0.006, hi: wr() < 0.3
+}));
+
+function draw(t) {
+  sg.clearRect(0, 0, W, H);
+  clouds.forEach(cl => {
+    const w = cl.c.width;
+    const x = ((cl.x + w + t * cl.spd) % (W + w)) - w;
+    sg.drawImage(cl.c, Math.round(x), cl.y);
+  });
+  sg.drawImage(staticLayer, 0, 0);
+
+  sg.fillStyle = C.water; sg.fillRect(0, WATER, W, H - WATER);
+  sg.fillStyle = C.waterD;
+  ISLANDS.forEach(([a, b]) => sg.fillRect(a, WATER, b - a + 1, 2));
+  ripples.forEach(r => {
+    const x = Math.round(((r.x + t * r.spd) % (W + 10)) - 5);
+    sg.fillStyle = r.hi ? C.waterHi : C.waterL;
+    sg.fillRect(x, r.y, r.len, 1);
+  });
+
+  // line and bobber
+  const bob = Math.sin(t / 700) > 0.6 ? 1 : 0;
+  sg.fillStyle = C.line;
+  for (let y = 75; y < WATER + bob; y++) if (y % 2 || y > 90) sg.fillRect(147, y, 1, 1);
+  px(sg, 147, WATER + bob, C.red);
+  px(sg, 147, WATER + bob - 1, C.white);
+  if (bob) { px(sg, 144, WATER + 2, C.waterHi); px(sg, 150, WATER + 2, C.waterHi); }
+  else { px(sg, 145, WATER + 1, C.waterL); px(sg, 149, WATER + 1, C.waterL); }
+}
+
+if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  draw(0);
+} else {
+  let last = -1e9;
+  const loop = ts => {
+    if (ts - last > 110) { draw(ts); last = ts; }
+    requestAnimationFrame(loop);
+  };
+  requestAnimationFrame(loop);
+}
+
+/* ---------- Reveal on scroll ---------- */
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+}), { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
