@@ -155,7 +155,15 @@ const SCENES = {
       rect(g, 86, 99, 8, 9, '#a8936c'); rect(g, 87, 100, 6, 8, '#d9c7a3'); rect(g, 89, 98, 2, 1, '#a8936c');
       rect(g, 88, 103, 4, 2, C.red);
     },
-    draw(g, t, p, n) {
+    draw(g, t, p, n, o = {}) {
+      // when the runner bunny dashes past (o.runnerX, in farm pixels), birds hop, flap and turn away
+      const dodge = x => {
+        if (o.runnerX == null) return null;
+        const d = x + 4 - (o.runnerX + 3);
+        if (Math.abs(d) > 18) return null;
+        return { dx: Math.sign(d || 1) * (18 - Math.abs(d)) * 0.6, dy: -2 - (Math.floor(t / 80) % 2) * 2, away: d > 0 };
+      };
+      const flap = (x, y) => { if (Math.floor(t / 80) % 2) { px(g, x - 1, y + 2, C.white); px(g, x + 9, y + 2, C.white); } };
       const laid = p >= 3000 && p < 5200, picked = p >= 5200;
       const count = String(146 + n + (picked ? 1 : 0)).padStart(3, '0');
       // egg icon + count on the board
@@ -165,11 +173,13 @@ const SCENES = {
       // wandering hens (+ chicks following the first one)
       [[184, 0], [238, 1], [282, 2]].forEach(([bx, i]) => {
         const k = t / (2600 + i * 500) + i * 2, x = bx + 14 * Math.sin(k), moving = Math.abs(Math.cos(k)) > 0.35;
-        const peck = !moving && Math.floor(t / 260 + i) % 3 === 0;
-        sprite(g, peck ? HEN_PECK : HEN, Math.round(x), GROUND - 8, { flip: Math.cos(k) > 0 });
+        const peck = !moving && Math.floor(t / 260 + i) % 3 === 0, f = dodge(x);
+        if (f) { sprite(g, HEN, Math.round(x + f.dx), GROUND - 8 + f.dy, { flip: f.away }); flap(Math.round(x + f.dx), GROUND - 8 + f.dy); }
+        else sprite(g, peck ? HEN_PECK : HEN, Math.round(x), GROUND - 8, { flip: Math.cos(k) > 0 });
         if (i === 0) [0, 1].forEach(j => {
-          const cx = x + (Math.cos(k) > 0 ? -9 - 6 * j : 11 + 6 * j);
-          sprite(g, CHICK, Math.round(cx), GROUND - 4 - (Math.floor(t / 220 + j) % 2), { flip: Math.cos(k) < 0 });
+          const cx = x + (Math.cos(k) > 0 ? -9 - 6 * j : 11 + 6 * j), fc = dodge(cx - 2);
+          if (fc) sprite(g, CHICK, Math.round(cx + fc.dx), GROUND - 6 + fc.dy, { flip: !fc.away });
+          else sprite(g, CHICK, Math.round(cx), GROUND - 4 - (Math.floor(t / 220 + j) % 2), { flip: Math.cos(k) < 0 });
         });
       });
 
@@ -180,7 +190,9 @@ const SCENES = {
       else if (p < 4200) { hx = lerp(122, 146, ease(phase(p, 3000, 4200))); hflip = true; }
       else if (p < 8800) hx = 146 + Math.round(4 * Math.sin(t / 500));
       else hx = lerp(146, 126, ease(phase(p, 8800, 10000)));
-      if (sit) {
+      const fl = dodge(hx);
+      if (fl) { sprite(g, HEN, Math.round(hx + fl.dx), GROUND - 8 + fl.dy, { flip: fl.away }); flap(Math.round(hx + fl.dx), GROUND - 8 + fl.dy); }
+      else if (sit) {
         sprite(g, { pal: HEN.pal, rows: HEN.rows.slice(0, 7) }, hx, GROUND - 6);
         if (p > 2300 && Math.floor(p / 200) % 2) px(g, hx + 4, GROUND - 9, C.red);   // little effort blink
       } else {
@@ -194,8 +206,11 @@ const SCENES = {
       if (p >= 4000 && p < 5000) { const u = phase(p, 4000, 5000); bx = lerp(100, 114, u); by += hop(u, 3, 3); }
       else if (p >= 5000 && p < 5400) { bx = 114; by += 1; }
       else if (p >= 5400 && p < 6400) { const u = phase(p, 5400, 6400); bx = lerp(114, 100, u); by += hop(u, 3, 3); flip = false; }
-      bunny(g, bx, by, { flip, t });
-      if (p >= 5400 && p < 6400) sprite(g, { pal: { w: '#fbf7ee' }, rows: ['.w.', 'www', 'www'] }, Math.round(bx) - 2, by - 5);
+      this.lastBunny = { x: Math.round(bx), foot: Math.round(by), flip };
+      if (!o.hideBunny) {
+        bunny(g, bx, by, { flip, t });
+        if (p >= 5400 && p < 6400) sprite(g, { pal: { w: '#fbf7ee' }, rows: ['.w.', 'www', 'www'] }, Math.round(bx) - 2, by - 5);
+      }
       if (p >= 5200 && p < 6600) { const u = phase(p, 5200, 6600); text(g, '+1', Math.round(lerp(116, 100, u)), Math.round(by - 18 - u * 8), C.gold); }
     }
   },
@@ -686,17 +701,28 @@ const clouds = [
 
 const skyLayer = document.createElement('canvas'); skyLayer.width = W; skyLayer.height = H;
 
-function draw(t) {
-  g.clearRect(0, 0, W, H);
+function drawTo(ctx, t, opts) {
+  ctx.clearRect(0, 0, W, H);
   clouds.forEach(cl => {
     const w = cl.c.width, x = ((cl.x + w + t * cl.spd) % (W + w)) - w;
-    g.drawImage(cl.c, Math.round(x), cl.y);
+    ctx.drawImage(cl.c, Math.round(x), cl.y);
   });
-  if (S.sky) { const sky = skyLayer.getContext('2d'); sky.clearRect(0, 0, W, H); S.sky(sky, t, t % S.cycle); g.drawImage(skyLayer, 0, 0); }
-  g.drawImage(backdrop, 0, 0);
-  S.draw(g, t, t % S.cycle, Math.floor(t / S.cycle));
+  if (S.sky) { const sky = skyLayer.getContext('2d'); sky.clearRect(0, 0, W, H); S.sky(sky, t, t % S.cycle); ctx.drawImage(skyLayer, 0, 0); }
+  ctx.drawImage(backdrop, 0, 0);
+  S.draw(ctx, t, t % S.cycle, Math.floor(t / S.cycle), opts);
 }
+const draw = t => drawTo(g, t);
 window.__drawScene = draw;   // handy for previewing individual frames
+
+// lets a banner mini-game reuse this scene: draw frames elsewhere, read the bunny, pause the loop
+let paused = false;
+window.SceneAPI = {
+  size: { W, H, GROUND },
+  renderFrame: (ctx, t, opts = {}) => drawTo(ctx, t, opts),
+  lastBunny: () => S.lastBunny || null,
+  pause: () => { paused = true; },
+  resume: () => { paused = false; }
+};
 
 if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
   draw(S.still);
@@ -704,7 +730,7 @@ if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
   let visible = true, last = -1e9;
   new IntersectionObserver(es => { visible = es[0].isIntersecting; }).observe(cv);
   const loop = ts => {
-    if (visible && !document.hidden && ts - last > 110) { draw(ts); last = ts; }
+    if (!paused && visible && !document.hidden && ts - last > 110) { draw(ts); last = ts; }
     requestAnimationFrame(loop);
   };
   requestAnimationFrame(loop);

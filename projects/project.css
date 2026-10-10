@@ -62,3 +62,54 @@ ul.dots li::before { content: ""; position: absolute; left: 0; top: 8px; width: 
 .pager .next { text-align: right; }
 
 footer { text-align: center; color: var(--muted); font-size: 12px; padding: 48px 16px 36px; }
+
+/* ---------- Click the bunny to play (banner mini-game) ---------- */
+.scene-box { position: absolute; left: 0; bottom: 0; width: 100%; aspect-ratio: 320 / 120; pointer-events: none; z-index: 2; }
+.bunny-hit {
+  position: absolute; transform: translate(-50%, -50%); width: max(14%, 44px); height: max(22%, 44px);
+  pointer-events: auto; background: none; border: 0; border-radius: 12px; cursor: pointer;
+}
+.bunny-hit::after {
+  content: attr(data-tip); position: absolute; left: 50%; bottom: 100%; transform: translate(-50%, 4px);
+  white-space: nowrap; background: var(--ink); color: #fff; font: 500 11.5px "JetBrains Mono", ui-monospace, monospace;
+  padding: 4px 10px; border-radius: 999px; opacity: 0; transition: opacity .2s, transform .2s; pointer-events: none;
+}
+.bunny-hit:hover::after, .bunny-hit:focus-visible::after { opacity: 1; transform: translate(-50%, -2px); }
+.bunny-hit:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+@media (hover: none) { .bunny-hit::after { opacity: .9; } }
+
+#runner {
+  position: absolute; left: 0; bottom: 0; width: 100%; height: auto; image-rendering: pixelated;
+  opacity: 0; cursor: pointer; outline: none; touch-action: manipulation;
+}
+#runner.on { opacity: 1; }
+.hero.playing #scene { opacity: 0; }
+.hero.playing .hero-content { pointer-events: none; }
+/* while playing, banner-game.js scrolls .hero-content left together with the farm */
+.hero.playing .bunny-hit { visibility: hidden; }
+
+.runner-hud {
+  position: absolute; bottom: 2%; left: 2%; display: flex; gap: 6px; align-items: center;   /* down on the dirt, behind the bunny: bugs arrive from the right */
+  font-size: 12px; pointer-events: auto; opacity: 0; visibility: hidden; transition: opacity .4s, visibility .4s;
+}
+.hero.playing .runner-hud { opacity: 1; visibility: visible; }
+.runner-hud span { background: rgba(249, 251, 248, .88); padding: 3px 10px; border-radius: 999px; }
+.runner-hud b { font-weight: 800; }
+.runner-hud button {
+  background: var(--ink); color: #fff; border: 0; border-radius: 999px; padding: 4px 12px;
+  font: 500 12px "JetBrains Mono", ui-monospace, monospace; cursor: pointer;
+}
+.runner-hud button:focus-visible { outline: 3px solid var(--coral); outline-offset: 2px; }
+.runner-msg {
+  position: absolute; left: 50%; top: 38%; transform: translate(-50%, 4px); max-width: 92%; text-align: center;
+  background: rgba(249, 251, 248, .92); padding: 6px 14px; border-radius: 999px; font-size: 12.5px;
+  opacity: 0; transition: opacity .3s, transform .3s; pointer-events: none;
+}
+.runner-msg.show { opacity: 1; transform: translate(-50%, 0); }
+@media (max-width: 600px) {   /* phones: the banner is small, so the scoreboard sits just above the game, in the empty sky */
+  .runner-hud { bottom: auto; top: -30px; left: 50%; transform: translateX(-50%); font-size: 11px; gap: 4px; white-space: nowrap; }
+  .runner-hud span { padding: 2px 7px; } .runner-msg { font-size: 11px; padding: 5px 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #scene, #runner, .runner-msg { transition: none; }
+}

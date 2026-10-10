@@ -32,6 +32,15 @@
     <div class="meta"><span>Personal project</span><span>Offline-first</span><span>45 → 200 birds</span></div>
   </div>
   <canvas id="scene" width="320" height="120" data-scene="poultry-farm" aria-hidden="true"></canvas>
+  <canvas id="runner" width="320" height="120" tabindex="-1" aria-label="Bug Runner. Press Space or tap to jump, Escape to exit." hidden></canvas>
+  <div class="scene-box">
+    <button class="bunny-hit" id="bannerPlay" type="button" data-tip="Race me ▶" aria-label="Play Bug Runner: race the bunny" style="left: 34.4%; top: 84%"></button>
+    <div class="runner-hud" id="runnerHud">
+      <span>Score <b id="runnerScore">0</b></span><span>Best <b id="runnerBest">0</b></span>
+      <button type="button" id="runnerExit">Exit ✕</button>
+    </div>
+    <p class="runner-msg" id="runnerMsg" role="status" aria-live="polite"></p>
+  </div>
 </header>
 
 <main>
@@ -73,5 +82,7 @@
 <footer>© <span id="yr"></span> Nikhil Babu P · Thrissur, Kerala</footer>
 <script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
 <script src="scene.js"></script>
+<script src="../play/runner.js"></script>
+<script src="banner-game.js"></script>
 </body>
 </html>
