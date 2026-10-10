@@ -114,6 +114,7 @@ const FONT = {
   9: ['111', '101', '111', '001', '111'], '+': ['000', '010', '111', '010', '000'], '=': ['000', '111', '000', '111', '000'],
   x: ['000', '101', '010', '101', '000'], ':': ['0', '1', '0', '1', '0'], '?': ['111', '001', '011', '000', '010'],
   '!': ['1', '1', '1', '0', '1'], z: ['111', '001', '010', '100', '111'], ' ': ['00', '00', '00', '00', '00'],
+  '-': ['000', '000', '111', '000', '000'], E: ['111', '100', '110', '100', '111'], N: ['101', '111', '111', '101', '101'], A: ['010', '101', '111', '101', '101'], R: ['110', '101', '110', '101', '101'],
   'v': ['00001', '00010', '10100', '01000', '00000']
 };
 function text(g, s, x, y, c, upto = Infinity) {
@@ -410,6 +411,166 @@ const SCENES = {
         if (p < 7800) text(g, 'v', bx + 9 + shake, 83, C.greenD);
         else [0, 1, 2].forEach(i => { if (Math.floor(t / 200) % 3 >= i) rect(g, bx + 7 + shake + i * 4, 85, 2, 2, C.gold); });
       }
+    }
+  },
+
+  /* Data feeds the reporting board; a report goes to the bank; the sign flips EN ⇄ AR. */
+  'finance-house': {
+    cycle: 10000, still: 4600,
+    trees: [[8, 40], [306, 44], [318, 34]], flowers: [110, 206, 300],
+    build(g) {
+      // bank: steps, columns, entablature, pediment with a coin
+      rect(g, 22, GROUND - 2, 78, 2, C.grey); rect(g, 25, GROUND - 4, 72, 2, C.greyL);
+      rect(g, 27, 99, 68, 5, C.white); rect(g, 27, 99, 68, 1, C.ink);
+      [30, 41, 74, 85].forEach(x => { rect(g, x, 77, 7, 22, C.white); rect(g, x + 5, 77, 2, 22, '#d8d2c6'); rect(g, x - 1, 75, 9, 2, C.ink); });
+      rect(g, 50, 82, 22, 17, '#4a3530'); rect(g, 49, 81, 24, 1, C.ink); px(g, 68, 91, C.gold);
+      rect(g, 24, 69, 74, 6, C.white); rect(g, 24, 69, 74, 1, C.ink); rect(g, 24, 74, 74, 1, C.ink);
+      for (let y = 55; y < 69; y++) {
+        const hw = Math.round((y - 55) * 2.6);
+        for (let x = 61 - hw; x <= 61 + hw; x++) px(g, x, y, Math.abs(x - 61) >= hw - 2 ? C.ink : C.white);
+      }
+      for (let y = -3; y <= 3; y++) for (let x = -3; x <= 3; x++) if (x * x + y * y <= 9) px(g, 61 + x, 64 + y, x * x + y * y > 5 ? '#c98b2e' : C.gold);
+      // reporting billboard on posts
+      rect(g, 140, 92, 2, GROUND - 92, C.trunk); rect(g, 184, 92, 2, GROUND - 92, C.trunk);
+      rect(g, 128, 56, 70, 37, C.ink); rect(g, 130, 58, 66, 33, C.white);
+      rect(g, 133, 88, 60, 1, C.greyL); rect(g, 133, 61, 1, 28, C.greyL);
+      // containers
+      [[222, 94, 33, C.red, C.redD], [257, 94, 33, C.sky, '#6f9a93'], [239, 80, 33, C.gold, '#c98b2e']].forEach(([x, y, w, c, d]) => {
+        rect(g, x, y, w, 14, d); rect(g, x + 1, y + 1, w - 2, 12, c);
+        for (let i = x + 3; i < x + w - 3; i += 3) rect(g, i, y + 2, 1, 10, d);
+        rect(g, x + w - 4, y + 3, 2, 8, C.ink);
+      });
+      // cables
+      line(g, 222, 100, 210, 100, C.line); line(g, 210, 100, 210, 74, C.line); line(g, 210, 74, 198, 74, C.line);
+      line(g, 128, 72, 98, 72, C.line);
+    },
+    draw(g, t, p) {
+      // container status lights
+      [[226, 97], [261, 97], [243, 83]].forEach(([x, y], i) => px(g, x, y, Math.floor(t / 300 + i * 2) % 3 ? C.green : C.white));
+
+      // data flowing into the board while the report builds
+      const path = [[222, 100], [210, 100], [210, 74], [198, 74]], cols = [C.red, C.sky, C.gold];
+      if (p < 4200) for (let i = 0; i < 3; i++) {
+        let d = (t / 35 + i * 14) % 48, k = 0;
+        const segs = [12, 26, 12];
+        while (k < 2 && d > segs[k]) { d -= segs[k]; k++; }
+        const [ax, ay] = path[k], [bx, by] = path[k + 1], u = d / segs[k];
+        rect(g, Math.round(lerp(ax, bx, u)) - 1, Math.round(lerp(ay, by, u)) - 1, 3, 3, cols[i]);
+      }
+
+      // bar chart grows, then resets at the end of the loop
+      const H = [7, 11, 9, 15, 19, 25], shrink = clamp01(phase(p, 8600, 9600));
+      const tops = [];
+      H.forEach((h, i) => {
+        const grow = ease(phase(p, 400 + i * 550, 900 + i * 550)), hh = Math.round(h * grow * (1 - shrink));
+        const x = 137 + i * 9;
+        if (hh > 0) { rect(g, x, 88 - hh, 6, hh, i === 5 ? C.green : C.sky); rect(g, x, 88 - hh, 6, 1, i === 5 ? C.greenD : '#6f9a93'); }
+        tops.push([x + 3, 87 - hh]);
+      });
+      if (p >= 3800 && p < 8600) for (let i = 0; i < 5; i++) line(g, tops[i][0], tops[i][1] - 2, tops[i + 1][0], tops[i + 1][1] - 2, C.red);
+      if (p >= 4000 && p < 8600 && Math.floor(p / 250) % 2) {                // "up" arrow
+        line(g, 186, 66, 186, 60, C.greenD); line(g, 183, 63, 186, 60, C.greenD); line(g, 189, 63, 186, 60, C.greenD);
+      }
+
+      // bunny presents the report with a pointer, hops when it peaks
+      const bx = 112, by = GROUND - 1 + (p >= 4000 && p < 5000 ? hop(phase(p, 4000, 5000), 2, 4) : 0);
+      bunny(g, bx, by, { flip: true, t });
+      const target = p < 4000 ? tops[Math.min(5, Math.floor(clamp01(phase(p, 400, 3700)) * 6))] : tops[5];
+      if (p < 5200) line(g, bx + 7, by - 4, Math.min(target[0], 130), Math.min(target[1] + 4, 86), C.trunkL);
+
+      // a finished report flies to the bank (investor relations)
+      if (p >= 5200 && p < 7200) {
+        const u = ease(phase(p, 5200, 7200)), x = Math.round(lerp(163, 61, u)), y = Math.round(lerp(70, 86, u) - Math.sin(u * Math.PI) * 18);
+        rect(g, x - 3, y - 4, 7, 9, C.ink); rect(g, x - 2, y - 3, 5, 7, C.white);
+        [y - 2, y, y + 2].forEach(ly => rect(g, x - 1, ly, 3, 1, C.greyD));
+      }
+      if (p >= 7200 && p < 8200 && Math.floor(p / 150) % 2) [[52, 84], [70, 84], [61, 80], [56, 96], [66, 96]].forEach(([x, y]) => px(g, x, y, C.gold));
+
+      // bilingual sign over the door flips EN ⇄ AR
+      const k = Math.floor(t / 1600) % 2, flipping = t % 1600 < 140;
+      rect(g, 54, flipping ? 85 : 84, 14, flipping ? 3 : 7, C.ink);
+      if (!flipping) text(g, k ? 'AR' : 'EN', 57, 85, C.gold);
+    }
+  },
+
+  /* Buy at the stall → scan the receipt → expense logged → coins saved into the piggy bank. */
+  'expense-tracker': {
+    cycle: 10000, still: 6800,
+    trees: [[296, 46], [314, 36], [205, 28]], flowers: [10, 112, 140, 250, 280],
+    build(g) {
+      // market stall
+      rect(g, 22, 66, 2, GROUND - 66, C.trunk); rect(g, 86, 66, 2, GROUND - 66, C.trunk);
+      for (let x = 18; x <= 91; x++) for (let y = 60; y <= 67; y++) px(g, x, y, Math.floor((x - 18) / 6) % 2 ? C.white : C.red);
+      for (let x = 18; x <= 91; x++) if ((x - 18) % 6 < 4) px(g, x, 68, Math.floor((x - 18) / 6) % 2 ? C.white : C.red);
+      rect(g, 18, 59, 74, 1, C.redD);
+      rect(g, 24, 90, 62, GROUND - 90, C.trunkL); rect(g, 24, 90, 62, 2, C.trunk);
+      for (let x = 26 + 2; x < 84; x += 8) { rect(g, x, 86, 4, 4, x % 16 ? C.red : C.gold); px(g, x + 1, 85, C.leafD); }
+      // the phone (dashboard)
+      rect(g, 150, 46, 41, 61, C.ink); rect(g, 167, 47, 7, 1, '#4a5a56');
+      rect(g, 153, 50, 35, 52, C.white);
+      rect(g, 153, 50, 35, 5, C.sky);
+      rect(g, 156, 99, 29, 1, C.greyL);
+      // piggy bank
+      sprite(g, { pal: { p: C.pink, P: '#d98f8a', k: '#8c5a55' }, rows: [
+        '...kkkkkk....', '..kppppppkk..', '.kppkpppppk.k', 'kppppppppppkk', 'kPpppppppppk.',
+        'kPpppppppppk.', '.kppppppppk..', '..kpk..kpk...', '..kk...kk....'] }, 222, GROUND - 9);
+      rect(g, 227, GROUND - 9, 3, 1, '#5a3a36');
+    },
+    draw(g, t, p, n) {
+      // bunny: buys at the stall, walks over to the phone, walks back
+      let bx = 92, flip = false, by = GROUND - 1;
+      if (p >= 1500 && p < 2200) { const u = phase(p, 1500, 2200); bx = lerp(92, 132, u); by += hop(u, 3, 3); flip = true; }
+      else if (p >= 2200 && p < 8600) { bx = 132; flip = true; }
+      else if (p >= 8600 && p < 9600) { const u = phase(p, 8600, 9600); bx = lerp(132, 92, u); by += hop(u, 3, 3); }
+      if (p >= 7600 && p < 8400) by += hop(phase(p, 7600, 8400), 2, 3);
+      bunny(g, bx, by, { flip, t });
+
+      // receipt pops out of the stall, goes into the phone
+      const slip = (x, y) => { rect(g, x, y, 5, 7, C.white); rect(g, x, y, 5, 1, C.greyL); [y + 2, y + 4].forEach(ly => rect(g, x + 1, ly, 3, 1, C.greyD)); };
+      if (p >= 700 && p < 1500) slip(Math.round(lerp(70, 92, ease(phase(p, 700, 1300)))), Math.round(lerp(84, 92, phase(p, 700, 1300)) - Math.sin(clamp01(phase(p, 700, 1300)) * Math.PI) * 10));
+      else if (p >= 1500 && p < 2200) slip(Math.round(bx + 6), by - 9);
+      else if (p >= 2200 && p < 2600) { const u = ease(phase(p, 2200, 2600)); slip(Math.round(lerp(138, 166, u)), Math.round(lerp(98, 62, u))); }
+
+      // screen: header + bell
+      const bell = p >= 7600 && p < 8400, sh = bell && Math.floor(t / 90) % 2 ? 1 : 0;
+      rect(g, 155, 51, 8, 3, C.white);
+      if (bell) { rect(g, 181 + sh, 51, 4, 3, C.gold); px(g, 182 + sh, 54, C.gold); }
+
+      // screen: top card changes with the story
+      const balance = String(1240 - 24 * (n % 3) - (p >= 3600 ? 24 : 0));
+      if (p >= 2600 && p < 3600) {                                 // scanning the receipt
+        rect(g, 162, 58, 17, 20, C.greyL); rect(g, 163, 59, 15, 18, C.white);
+        [62, 66, 70, 74].forEach((y, i) => rect(g, 165, y, i % 2 ? 8 : 11, 1, C.greyD));
+        const sy = Math.round(lerp(59, 76, (p - 2600) % 500 / 500));
+        rect(g, 161, sy, 19, 1, C.green);
+        [[160, 57], [180, 57], [160, 78], [180, 78]].forEach(([x, y]) => px(g, x, y, C.greenD));
+      } else if (p >= 3600 && p < 5600) {                          // parsed: amount + category
+        text(g, '-24', 157, 59, C.red);
+        rect(g, 157, 67, 14, 4, C.gold); rect(g, 158, 68, 12, 2, '#f2c46b');
+        text(g, balance, 157, 74, C.ink);
+      } else if (p >= 5600 && p < 8600) {                          // savings goal fills
+        const fill = Math.round(lerp(8, 27, ease(phase(p, 5800, 7400))));
+        rect(g, 157, 60, 27, 4, C.greyL); rect(g, 157, 60, fill, 4, C.green);
+        if (p >= 7400) text(g, 'v', 162, 67, C.greenD);
+        text(g, balance, 157, 74, C.ink);
+      } else {
+        text(g, balance, 157, 59, C.ink);
+        rect(g, 157, 66, 20, 1, C.greyL); rect(g, 157, 69, 14, 1, C.greyL);
+      }
+
+      // screen: bar chart; the newest bar grows once the receipt is logged
+      [10, 14, 8, 12].forEach((h, i) => rect(g, 157 + i * 6, 98 - h, 4, h, C.sky));
+      const nh = Math.round(16 * ease(phase(p, 3700, 4600)) * (p < 8600 ? 1 : 1 - phase(p, 8600, 9400)));
+      if (nh > 0) rect(g, 181, 98 - nh, 4, nh, C.red);
+
+      // coins fly into the piggy bank
+      if (p >= 5800 && p < 7400) for (let i = 0; i < 3; i++) {
+        const u = ease(phase(p, 5800 + i * 450, 6500 + i * 450));
+        if (u <= 0 || u >= 1) continue;
+        const x = Math.round(lerp(190, 228, u)), y = Math.round(lerp(72, 98, u) - Math.sin(u * Math.PI) * 14);
+        rect(g, x - 1, y - 1, 3, 3, C.gold); px(g, x, y, '#f7dc8f');
+      }
+      if (p >= 7400 && p < 8400 && Math.floor(p / 160) % 2) [[220, 92], [238, 90], [229, 86], [216, 100], [242, 98]].forEach(([x, y]) => px(g, x, y, C.gold));
     }
   },
 

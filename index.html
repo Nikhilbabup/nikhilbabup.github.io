@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Nikhil Babu P</title>
-<meta name="description" content="Nikhil Babu P — Software Engineer building calm, reliable backend systems, payment services, desktop and mobile apps.">
+<meta name="description" content="Nikhil Babu P — Backend Engineer building calm, reliable backend systems, payment services, desktop and mobile apps, and AI agents.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Nikhil Babu P — Software Engineer">
-<meta property="og:description" content="Backend, payments and desktop engineer. Node.js, TypeScript, AWS. Payment switching, queue-based transaction processing, Electron and Flutter apps.">
+<meta property="og:title" content="Nikhil Babu P — Backend Engineer">
+<meta property="og:description" content="Backend, payments and desktop engineer. Node.js, TypeScript, AWS. Payment switching, queue-based transaction processing, Electron and Flutter apps, and AI agents.">
 <meta name="twitter:card" content="summary">
 <meta name="theme-color" content="#d3e6de">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 7 9' shape-rendering='crispEdges'%3E%3Cpath fill='%23557f6c' d='M3 0h1v1H3zM2 1h3v1H2zM2 2h3v1H2zM1 3h5v1H1zM2 4h3v1H2zM1 5h5v1H1zM0 6h7v1H0z'/%3E%3Cpath fill='%237fa98e' d='M3 1h1v1H3zM3 3h1v1H3zM3 5h1v1H3z'/%3E%3Cpath fill='%237a4c40' d='M3 7h1v2H3z'/%3E%3C/svg%3E">
@@ -94,7 +94,7 @@
     display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
     margin: 40px auto 0; max-width: 680px;
   }
-  .feature canvas { width: 30px; image-rendering: pixelated; display: block; margin: 0 auto 10px; }
+  .feature canvas { height: 30px; width: auto; image-rendering: pixelated; display: block; margin: 0 auto 10px; }
   .feature h3 { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
   .feature p { font-size: 13px; color: var(--muted); line-height: 1.6; }
   .hero .cta { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
@@ -130,6 +130,13 @@
   .timeline { display: grid; gap: 20px; }
   .job-head { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 16px; margin-bottom: 4px; }
   .job h3 { font-size: 16px; font-weight: 700; }
+  .job { display: grid; grid-template-columns: 48px 1fr; gap: 18px; align-items: start; }
+  .logo {
+    width: 48px; height: 48px; object-fit: cover; display: block;
+    border-radius: 10px; border: 2px solid var(--line); box-shadow: 0 3px 0 var(--line);
+  }
+  .job .org:last-child { margin-bottom: 0; }
+  @media (max-width: 480px) { .job { grid-template-columns: 1fr; gap: 12px; } .logo { width: 40px; height: 40px; } }
   .when { font-size: 12px; color: #fff; background: var(--ink); border-radius: 999px; padding: 2px 12px; align-self: flex-start; }
   .org { color: var(--muted); font-size: 14px; margin-bottom: 14px; }
   ul.dots { list-style: none; display: grid; gap: 8px; }
@@ -161,6 +168,10 @@
   .edu h3 { font-size: 15px; }
   .edu p { color: var(--muted); font-size: 14px; }
   .edu .when { display: inline-block; margin-top: 12px; }
+  .cert { display: flex; gap: 16px; align-items: flex-start; }
+  .cert canvas { height: 30px; width: auto; flex: none; margin-top: 3px; image-rendering: pixelated; }
+  .verify { display: inline-block; margin-top: 10px; font-size: 12.5px; font-weight: 500; color: var(--coral); }
+  .verify:hover { text-decoration: underline; }
 
   /* Contact */
   .contact {
@@ -202,11 +213,12 @@
   </nav>
 
   <div class="hero-content">
-    <div class="hello">Hi, I'm <b>Nikhil</b> — Software Engineer</div>
+    <div class="hello">Hi, I'm <b>Nikhil</b> — Backend Engineer</div>
     <h1>Where Clean Code<br>Meets Calm Systems.</h1>
     <p class="lead">
-      I build steady, scalable backends, secure payment services and cross-platform desktop and mobile apps,
-      with Node.js, TypeScript and AWS. I'm a quick self-learner and always curious about what's next.
+      4+ years building APIs in Node.js and TypeScript, from ATM and POS payment
+      switching to financial platforms and real-time marketplaces on PostgreSQL and MongoDB. I also ship
+      Flutter and Electron apps, deploy with Docker on AWS and GCP, and build with AI agents to move faster.
     </p>
 
     <div class="features">
@@ -216,9 +228,9 @@
         <p>Node.js, Nest, Adonis and Express services built to scale.</p>
       </div>
       <div class="feature">
-        <canvas data-sprite="card"></canvas>
-        <h3>Payment Systems</h3>
-        <p>Secure payment flows, gateways and ATM/POS switching.</p>
+        <canvas data-sprite="bot"></canvas>
+        <h3>AI-Powered Engineering</h3>
+        <p>Google Antigravity and Claude for faster, cleaner code, plus AI agents and automation.</p>
       </div>
       <div class="feature">
         <canvas data-sprite="monitor"></canvas>
@@ -237,9 +249,9 @@
 </header>
 
 <div class="stats reveal">
-  <div class="stat"><b>4+ yrs</b><span>building production software</span></div>
-  <div class="stat"><b>~70%</b><span>server load cut with per-user cron scheduling</span></div>
-  <div class="stat"><b>300+</b><span>daily users on the Timez desktop app</span></div>
+  <div class="stat"><b>8</b><span>products shipped across backend, payments, desktop and mobile</span></div>
+  <div class="stat"><b>~70%</b><span>server load cut on Timez with per-user cron scheduling</span></div>
+  <div class="stat"><b>45 → 200</b><span>chickens on my farm, managed with my own Flutter app</span></div>
 </div>
 
 <section class="section reveal" id="experience">
@@ -247,22 +259,41 @@
   <h2>Where I've Worked</h2>
   <div class="timeline">
     <article class="card job">
-      <div class="job-head"><h3>Associate Software Engineer</h3><span class="when">Jun 2023 — Dec 2025</span></div>
-      <div class="org">Webandcrafts · Koratty, Kerala</div>
-      <ul class="dots">
-        <li>Designed and implemented secure payment services and integrated third-party APIs, with a focus on compliance and scalability.</li>
-        <li>Moved the Timez desktop app's background jobs to per-user cron scheduling, cutting server load by ~70% and improving stability.</li>
-        <li>Built a recovery mechanism that preserves user data through unexpected shutdowns and crashes.</li>
-        <li>Built the Logos Learning admin panel APIs for tutor and student management and tutor payouts.</li>
-      </ul>
+      <img class="logo" src="assets/logos/smarthatch.jpg" alt="Smart Hatch Technologies logo" width="48" height="48" loading="lazy">
+      <div>
+        <div class="job-head"><h3>Back End Developer</h3><span class="when">Jan 2026 — Present</span></div>
+        <div class="org">Smart Hatch Technologies FZE · Kochi, Kerala · Full-time</div>
+        <ul class="dots">
+          <li>Developing the Finance House backend for its LLC and PJSC businesses, covering bilingual (English/Arabic) content, products, SEO, and investor relations and financial reporting. Built with Node.js, TypeScript, Express, PostgreSQL and Sequelize.</li>
+          <li>Hardened the Finance House APIs with JWT auth, Helmet, rate limiting, Joi validation and HTML sanitisation against XSS. Added image optimisation with Sharp, structured logging with Winston, Jest tests, and Docker-based deployments.</li>
+          <li>Worked on the CMS for the Omnia website: a TypeScript and Express app on MongoDB (Mongoose) with server-rendered EJS admin pages, JWT auth, Joi validation, file uploads and Excel exports.</li>
+        </ul>
+      </div>
     </article>
     <article class="card job">
-      <div class="job-head"><h3>Jr. Software Payment Engineer</h3><span class="when">Aug 2022 — Jun 2023</span></div>
-      <div class="org">Applied Payments · Kakkanad, Kerala</div>
-      <ul class="dots">
-        <li>Implemented the Naiguata payment interface, enabling seamless international transaction processing.</li>
-        <li>Optimised transaction processing in Pravega by resolving a critical packet-splitting issue, improving overall processing speed.</li>
-      </ul>
+      <img class="logo" src="assets/logos/webandcrafts.jpg" alt="Webandcrafts logo" width="48" height="48" loading="lazy">
+      <div>
+        <div class="job-head"><h3>Associate Software Engineer</h3><span class="when">Jun 2023 — Dec 2025</span></div>
+        <div class="org">Webandcrafts · Koratty, Kerala</div>
+        <ul class="dots">
+          <li>Designed and implemented secure payment services and integrated third-party APIs, with a focus on compliance and scalability.</li>
+          <li>Moved the Timez desktop app's background jobs to per-user cron scheduling, cutting server load by ~70% and improving stability.</li>
+          <li>Built a recovery mechanism that preserves user data through unexpected shutdowns and crashes.</li>
+          <li>Built the Logos Learning admin panel APIs for tutor and student management and tutor payouts.</li>
+          <li>Built the Trinity Solar customer portal APIs on Adonis.js and PostgreSQL, with JWT auth and Twilio SMS notifications.</li>
+        </ul>
+      </div>
+    </article>
+    <article class="card job">
+      <img class="logo" src="assets/logos/applied-payments.jpg" alt="Applied Payments logo" width="48" height="48" loading="lazy">
+      <div>
+        <div class="job-head"><h3>Jr. Software Payment Engineer</h3><span class="when">Aug 2022 — Jun 2023</span></div>
+        <div class="org">Applied Payments · Kakkanad, Kerala</div>
+        <ul class="dots">
+          <li>Implemented the Naiguata payment interface, enabling seamless international transaction processing.</li>
+          <li>Optimised transaction processing in Pravega by resolving a critical packet-splitting issue, improving overall processing speed.</li>
+        </ul>
+      </div>
     </article>
   </div>
 </section>
@@ -271,39 +302,53 @@
   <div class="eyebrow">Projects</div>
   <h2>Things I've Built</h2>
   <div class="grid">
+    <a class="card project" href="projects/finance-house.html">
+      <div class="top"><canvas data-sprite="bank"></canvas><h3>Finance House</h3></div>
+      <div class="sub">Backend platform · Smart Hatch</div>
+      <p>Backend for the LLC and PJSC businesses: bilingual content, investor relations, financial reporting and hardened security.</p>
+      <div class="tags"><span>Node.js</span><span>TypeScript</span><span>PostgreSQL</span><span>Docker</span><span>+4</span></div>
+      <span class="more">Read case study →</span>
+    </a>
     <a class="card project" href="projects/poultry-farm.html">
-      <div class="top"><canvas data-sprite="hen"></canvas><h3>Poultry Farm Manager</h3></div>
+      <div class="top"><canvas data-sprite="hen"></canvas><h3>PoultryPro</h3></div>
       <div class="sub">Personal project · Flutter mobile app</div>
-      <p>Built to run my own poultry farm as it grew from 45 to 200 chickens: flock count, mortality, egg logs, orders, finances, feed and reports.</p>
-      <div class="tags"><span>Flutter</span><span>Dart</span></div>
+      <p>Offline-first app I built to run my own poultry farm as it grew from 45 to 200 chickens: flock, eggs, orders, finances, feed and reports.</p>
+      <div class="tags"><span>Flutter</span><span>Riverpod</span><span>SQLite</span><span>Firebase</span><span>+2</span></div>
+      <span class="more">Read case study →</span>
+    </a>
+    <a class="card project" href="projects/expense-tracker.html">
+      <div class="top"><canvas data-sprite="receipt"></canvas><h3>Expense Tracker</h3></div>
+      <div class="sub">Personal project · Flutter mobile app</div>
+      <p>Personal finance app with on-device OCR receipt scanning, savings goals that track themselves, and a chart dashboard.</p>
+      <div class="tags"><span>Flutter</span><span>Riverpod</span><span>Hive</span><span>Google ML Kit</span><span>+2</span></div>
       <span class="more">Read case study →</span>
     </a>
     <a class="card project" href="projects/timez.html">
       <div class="top"><canvas data-sprite="monitor"></canvas><h3>Timez</h3></div>
       <div class="sub">Desktop app · Mac / Windows / Linux</div>
       <p>Employee-activity monitoring app used daily by 300+ people; ~70% less server load after a scheduling redesign.</p>
-      <div class="tags"><span>Electron.js</span><span>Node.js</span><span>electron-log</span></div>
+      <div class="tags"><span>Electron.js</span><span>Node.js</span></div>
       <span class="more">Read case study →</span>
     </a>
     <a class="card project" href="projects/logos-learning.html">
       <div class="top"><canvas data-sprite="book"></canvas><h3>Logos Learning</h3></div>
       <div class="sub">Tutoring marketplace</div>
       <p>Students find vetted tutors and book sessions online or in person, with payments and real-time updates.</p>
-      <div class="tags"><span>Node.js</span><span>TypeScript</span><span>Adonis.js</span><span>MongoDB</span><span>+6</span></div>
+      <div class="tags"><span>Node.js</span><span>TypeScript</span><span>Adonis.js</span><span>MongoDB</span><span>+3</span></div>
       <span class="more">Read case study →</span>
     </a>
     <a class="card project" href="projects/trinity-solar.html">
       <div class="top"><canvas data-sprite="sun"></canvas><h3>Trinity Solar Portal</h3></div>
       <div class="sub">Customer portal</div>
       <p>A portal where customers manage their solar energy systems, with SMS notifications and JWT auth.</p>
-      <div class="tags"><span>Node.js</span><span>TypeScript</span><span>Adonis.js</span><span>Lucid ORM</span><span>+2</span></div>
+      <div class="tags"><span>Node.js</span><span>TypeScript</span><span>PostgreSQL</span><span>Adonis.js</span><span>+2</span></div>
       <span class="more">Read case study →</span>
     </a>
     <a class="card project" href="projects/pravega.html">
       <div class="top"><canvas data-sprite="card"></canvas><h3>Pravega</h3></div>
       <div class="sub">Payment switch middleware</div>
       <p>Connects ATMs and POS terminals to payment switches, using queue-based transaction processing.</p>
-      <div class="tags"><span>Node.js</span><span>TypeScript</span><span>Express.js</span><span>BullMQ</span><span>+2</span></div>
+      <div class="tags"><span>Node.js</span><span>TypeScript</span><span>Redis</span><span>BullMQ</span><span>+2</span></div>
       <span class="more">Read case study →</span>
     </a>
   </div>
@@ -314,20 +359,51 @@
   <h2>Skills</h2>
   <div class="skills">
     <div class="card">
-      <h3>Languages &amp; Tech</h3>
-      <div class="tags"><span>Node.js</span><span>TypeScript</span><span>Dart</span><span>GraphQL</span><span>React.js</span><span>Socket.IO</span><span>Microservices</span></div>
+      <h3>Languages</h3>
+      <div class="tags"><span>JavaScript</span><span>TypeScript</span><span>Dart</span><span>SQL</span></div>
     </div>
     <div class="card">
-      <h3>Frameworks</h3>
-      <div class="tags"><span>Express.js</span><span>Adonis.js</span><span>Nest.js</span><span>Electron.js</span><span>Flutter</span></div>
+      <h3>Frameworks &amp; Runtimes</h3>
+      <div class="tags"><span>Node.js</span><span>Express.js</span><span>Nest.js</span><span>Adonis.js</span><span>React.js</span><span>Electron.js</span><span>Flutter</span></div>
     </div>
     <div class="card">
       <h3>Databases</h3>
-      <div class="tags"><span>MongoDB</span><span>MySQL</span><span>PostgreSQL</span><span>Redis</span></div>
+      <div class="tags"><span>PostgreSQL</span><span>MongoDB</span><span>MySQL</span><span>Redis</span><span>SQLite</span><span>Firebase</span></div>
     </div>
     <div class="card">
-      <h3>Cloud &amp; Tools</h3>
-      <div class="tags"><span>AWS</span><span>Git</span><span>BullMQ</span></div>
+      <h3>APIs &amp; Backend</h3>
+      <div class="tags"><span>REST APIs</span><span>GraphQL</span><span>Socket.IO</span><span>Microservices</span><span>BullMQ</span></div>
+    </div>
+    <div class="card">
+      <h3>Cloud &amp; DevOps</h3>
+      <div class="tags"><span>Docker</span><span>AWS</span><span>Google Cloud (GCP)</span><span>PM2</span><span>Jest</span><span>Git</span></div>
+    </div>
+    <div class="card">
+      <h3>AI &amp; Agentic Development</h3>
+      <div class="tags"><span>Claude</span><span>Google Antigravity</span><span>AI Agents</span><span>Prompt Engineering</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section reveal" id="certifications">
+  <div class="eyebrow">Credentials</div>
+  <h2>Certifications</h2>
+  <div class="edu">
+    <div class="card cert">
+      <canvas data-sprite="cloud"></canvas>
+      <div>
+        <h3>Architecting with Google Compute Engine</h3>
+        <p>Google Cloud · Coursera Specialization</p>
+        <a class="verify" href="https://www.coursera.org/account/accomplishments/specialization/certificate/B8N9YAQAN9K3" target="_blank" rel="noopener">Verify credential ↗</a>
+      </div>
+    </div>
+    <div class="card cert">
+      <canvas data-sprite="medal"></canvas>
+      <div>
+        <h3>JavaScript (Intermediate)</h3>
+        <p>HackerRank · Skills Certification</p>
+        <a class="verify" href="https://www.hackerrank.com/certificates/e11edefbd57b" target="_blank" rel="noopener">Verify credential ↗</a>
+      </div>
     </div>
   </div>
 </section>
@@ -414,6 +490,19 @@ const SPRITES = {
   card: { pal: { r: C.red, d: C.ink, w: C.white, y: C.gold }, rows: [
     '.rrrrrrrrrr.', 'rrrrrrrrrrrr', 'dddddddddddd', 'rrrrrrrrrrrr', 'ryyrrrrrrrrr',
     'ryyrrrrrrrrr', 'rrrrrrwwwwrr', '.rrrrrrrrrr.'] },
+  bot: { pal: { d: C.ink, w: '#e6f0eb', b: C.sky, r: C.red, m: C.line }, rows: [
+    '....rr....', '....dd....', '.dddddddd.', '.dwwwwwwd.', 'ddwbwwbwdd', 'ddwbwwbwdd',
+    '.dwwwwwwd.', '.dwmmmmwd.', '.dwwwwwwd.', '.dddddddd.'] },
+  cloud: { pal: { d: C.ink, w: C.white, b: C.sky }, rows: [
+    '....ddd.....', '...dwwwd....', '.dddwwwwdd..', 'dwwwwwwwwwd.', 'dwwwwwwwwwwd', 'dbwwwwwwwbbd', '.dddddddddd.'] },
+  medal: { pal: { r: C.red, d: C.ink, y: C.gold, o: '#f7dc8f' }, rows: [
+    'rr.....rr', '.rr...rr.', '..rr.rr..', '...ddd...', '..dyyyd..', '.dyyoyyd.', '.dyoooyd.', '.dyyoyyd.', '..dyyyd..', '...ddd...'] },
+  bank: { pal: { d: C.ink, w: C.white, y: C.gold, s: '#d8d2c6' }, rows: [
+    '.....dd.....', '...dyyyyd...', '.dddddddddd.', 'dddddddddddd', '.ws..ws..ws.', '.ws..ws..ws.',
+    '.ws..ws..ws.', 'dddddddddddd', 'dddddddddddd'] },
+  receipt: { pal: { d: C.ink, w: C.white, k: '#9aa09b', g: '#6fbf73' }, rows: [
+    'ddddddddd', 'dwwwwwwwd', 'dwkkkkwwd', 'dwwwwwwwd', 'dwkkkwkwd', 'dwwwwwwwd',
+    'dwkkkwkwd', 'dwwwwwwwd', 'dwggggwwd', 'dwwwwwwwd', 'd.d.d.d.d'] },
   monitor: { pal: { d: C.ink, b: C.sky, g: '#cfe3c9', w: C.white }, rows: [
     'dddddddddddd', 'dbbbbbbbbbbd', 'dbwwbbbbbbbd', 'dbbbbbggbbbd', 'dbbbbggggbbd',
     'dbggggggggbd', 'dddddddddddd', '.....dd.....', '...dddddd...'] },
