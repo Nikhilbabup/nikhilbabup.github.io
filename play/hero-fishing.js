@@ -6,6 +6,8 @@ const triggers = [...document.querySelectorAll('[data-play="fish"]')];
 if (!hero || !cv || !scene || !window.FishGame || !triggers.length) return;
 const $ = id => document.getElementById(id);
 const msg = $('fishMsg'), el = { score: $('fishScore'), time: $('fishTime'), mult: $('fishMult'), best: $('fishBest') };
+const SKY = window.Sky ? Sky.place({ x: 290, y: 16 }) : null;   // the same sky as the idle scene, painted over the game
+const paintSky = () => { if (SKY) Sky.paint(cv.getContext('2d'), SKY); };
 let ctl = null, playing = false, hintTimer = 0, fadeTimer = 0, pauseTimer = 0, shown = {}, opener = triggers[0];
 
 const flash = (text, ms) => {
@@ -23,7 +25,7 @@ function start(e) {
   playing = true;
   opener = (e && e.currentTarget) || triggers[0];
   if (!ctl) ctl = FishGame.mount(cv, {
-    onFrame: setHud,
+    onFrame(g, best) { paintSky(); setHud(g, best); },
     onEvent(ev, g, best) {
       if (ev.type === 'start') msg.classList.remove('show');
       else if (ev.type === 'catch') flash((ev.fish === 'golden' ? 'Golden fish! +' : 'Nice catch! +') + ev.points, 900);
@@ -36,7 +38,7 @@ function start(e) {
   clearTimeout(fadeTimer);
   ctl.reset(); shown = {};
   ctl.start({ cast: true });                              // the click casts the line straight away
-  ctl.render(ctl.state, performance.now());               // same pond, same frame
+  ctl.render(ctl.state, performance.now()); paintSky();   // same pond, same frame, same sky
   cv.hidden = false; void cv.offsetWidth;                 // commit the start state so the crossfade runs
   cv.classList.add('on');                                 // the game fades in over the idle scene (CSS: .35s)
   hero.classList.add('playing');                          // the features and buttons fade away; the hero keeps its size

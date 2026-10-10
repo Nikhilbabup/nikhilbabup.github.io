@@ -8,6 +8,7 @@ if (!hero || !trigger || !cv || !window.BugRunner) return;
 const $ = id => document.getElementById(id);
 const content = hero.querySelector('.hero-content'), msg = $('runnerMsg'), scoreEl = $('runnerScore'), bestEl = $('runnerBest');
 const scene = document.getElementById('scene'), api = window.SceneAPI;
+const paintSky = () => { if (window.Sky && api && api.sky) Sky.paint(cv.getContext('2d'), api.sky); };   // day or night, over the game too
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 let ctl = null, playing = false, hintTimer = 0, shownScore = -1, fadeTimer = 0, scale = 1, shownShift = null;
 
@@ -40,7 +41,7 @@ function start() {
   if (!ctl) ctl = BugRunner.mount(cv, {
     world: { width: W, height: H, ground: GROUND },
     prelude,
-    onFrame(s, best) { moveContent(s); if (s.score !== shownScore) { shownScore = s.score; scoreEl.textContent = s.score; } bestEl.textContent = best; },
+    onFrame(s, best) { paintSky(); moveContent(s); if (s.score !== shownScore) { shownScore = s.score; scoreEl.textContent = s.score; } bestEl.textContent = best; },
     onEvent(e, s, best) {
       if (e.type === 'start') msg.classList.remove('show');
       if (e.type === 'hit') flash('Bug hit! Score ' + e.score + (e.isBest && e.score > 0 ? ' (new best!)' : '') + ' · tap or Space to run again');
@@ -52,7 +53,7 @@ function start() {
   ctl.reset({ bunnyFrom: b.x, bunnyX: Math.min(b.x + 20, Math.round(W * 0.47)), startDist: -W, accelMs: 800, introJump: true, firstGap: 150 });
   shownScore = -1;
   ctl.start({ run: true });
-  ctl.render(ctl.state, performance.now());              // first game frame == the scene, minus nothing
+  ctl.render(ctl.state, performance.now()); paintSky();  // first game frame == the scene, minus nothing
   cv.hidden = false; cv.classList.add('on');             // swap canvases in the same frame: no fade
   measure(); shownShift = null; content.style.transition = 'none'; moveContent(ctl.state);
   hero.classList.add('playing');

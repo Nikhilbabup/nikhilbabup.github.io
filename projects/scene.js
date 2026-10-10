@@ -378,25 +378,9 @@ const SCENES = {
       for (let x = 82; x < 172; x += 6) rect(g, x, 100, 2, GROUND - 100, C.white);
       rect(g, 80, 102, 92, 1, C.white);
     },
-    sky(g, t, p) {
-      const day = p < 8000, u = p / 8000;
-      // sun by day, moon at night
-      if (day) {
-        const sx = Math.round(lerp(24, 296, u)), sy = Math.round(84 - Math.sin(u * Math.PI) * 38);
-        for (let y = -3; y <= 3; y++) for (let x = -3; x <= 3; x++) if (x * x + y * y <= 10) px(g, sx + x, sy + y, x * x + y * y > 6 ? '#f2c46b' : C.gold);
-        if (Math.floor(t / 300) % 2) [[0, -6], [0, 6], [-6, 0], [6, 0], [-4, -4], [4, -4], [-4, 4], [4, 4]].forEach(([x, y]) => px(g, sx + x, sy + y, C.gold));
-      } else {
-        const v = (p - 8000) / 4000, mx = Math.round(lerp(40, 280, v)), my = Math.round(80 - Math.sin(v * Math.PI) * 30);
-        for (let y = -3; y <= 3; y++) for (let x = -3; x <= 3; x++) { const d = x * x + y * y; if (d <= 10) px(g, mx + x, my + y, d > 6 ? '#b9b39f' : '#fff6d8'); }
-        g.clearRect(mx + 1, my - 4, 3, 6);   // crescent (sky layer, so this only cuts the moon)
-        [[60, 52], [110, 46], [150, 60], [250, 48], [290, 58], [200, 42]].forEach(([x, y], i) => {
-          if (Math.floor(t / 350 + i) % 3) { px(g, x, y, C.gold); if (i % 2) { px(g, x - 1, y, '#f2c46b'); px(g, x + 1, y, '#f2c46b'); px(g, x, y - 1, '#f2c46b'); px(g, x, y + 1, '#f2c46b'); } }
-        });
-      }
-    },
     draw(g, t, p) {
-      const day = p < 8000, u = p / 8000;
-      // panel glint while sunny
+      const day = p < 8000 && !(window.Sky && Sky.dark), u = p / 8000;
+      // panel glint while sunny (never at night)
       if (day && u > 0.1 && u < 0.9) { const gx = 186 + Math.floor(t / 120) % 20; for (let y = 67; y <= 77; y += 1) px(g, gx - (y - 67) / 2, y, C.panelL); }
 
       // battery level: charges by day, powers the house at night
@@ -699,25 +683,26 @@ const clouds = [
   { c: makeCloud(40, 20, [[10, 13, 7], [21, 9, 9], [32, 13, 6]]), x: 270, y: 22, spd: 0.002 }
 ];
 
-const skyLayer = document.createElement('canvas'); skyLayer.width = W; skyLayer.height = H;
-
 function drawTo(ctx, t, opts) {
   ctx.clearRect(0, 0, W, H);
   clouds.forEach(cl => {
     const w = cl.c.width, x = ((cl.x + w + t * cl.spd) % (W + w)) - w;
     ctx.drawImage(cl.c, Math.round(x), cl.y);
   });
-  if (S.sky) { const sky = skyLayer.getContext('2d'); sky.clearRect(0, 0, W, H); S.sky(sky, t, t % S.cycle); ctx.drawImage(skyLayer, 0, 0); }
   ctx.drawImage(backdrop, 0, 0);
   S.draw(ctx, t, t % S.cycle, Math.floor(t / S.cycle), opts);
 }
-const draw = t => drawTo(g, t);
+// the sun / moon (assets/sky.js) is painted over the main banner only; a banner game paints its own frames
+const SKY = window.Sky ? Sky.place({ x: 290, y: 16, W, H }) : null;
+if (SKY) Sky.attach(cv, SKY);
+const draw = t => { drawTo(g, t); if (SKY) Sky.paint(g, SKY); };
 window.__drawScene = draw;   // handy for previewing individual frames
 
 // lets a banner mini-game reuse this scene: draw frames elsewhere, read the bunny, pause the loop
 let paused = false;
 window.SceneAPI = {
   size: { W, H, GROUND },
+  sky: SKY,
   renderFrame: (ctx, t, opts = {}) => drawTo(ctx, t, opts),
   lastBunny: () => S.lastBunny || null,
   pause: () => { paused = true; },
@@ -726,11 +711,12 @@ window.SceneAPI = {
 
 if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
   draw(S.still);
+  if (window.Sky) Sky.onChange(() => draw(S.still));
 } else {
   let visible = true, last = -1e9;
   new IntersectionObserver(es => { visible = es[0].isIntersecting; }).observe(cv);
   const loop = ts => {
-    if (!paused && visible && !document.hidden && ts - last > 110) { draw(ts); last = ts; }
+    if (!paused && visible && !document.hidden && (ts - last > 110 || (window.Sky && Sky.busy()))) { draw(ts); last = ts; }   // every frame while the sky changes
     requestAnimationFrame(loop);
   };
   requestAnimationFrame(loop);

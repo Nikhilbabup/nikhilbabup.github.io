@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<script>/* dark mode before first paint (assets/sky.js) */try{var t=localStorage.getItem("theme");if(t==="dark"||(!t&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.dataset.theme="dark"}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PoultryPro · Nikhil Babu P</title>
 <meta name="description" content="PoultryPro is the Flutter app I built to run my own poultry farm. It covers flock count, mortality, egg production and sales, orders, finances, feed purchases and reports, and it works fully offline.">
@@ -81,6 +82,7 @@
 
 <footer>© <span id="yr"></span> Nikhil Babu P · Thrissur, Kerala</footer>
 <script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+<script src="../assets/sky.js"></script>
 <script src="scene.js"></script>
 <script src="../play/runner.js"></script>
 <script src="banner-game.js"></script>
