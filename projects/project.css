@@ -89,7 +89,7 @@ footer { text-align: center; color: var(--muted); font-size: 12px; padding: 48px
 .hero.playing .bunny-hit { visibility: hidden; }
 
 .runner-hud {
-  position: absolute; bottom: 2%; left: 2%; display: flex; gap: 6px; align-items: center;   /* down on the dirt, behind the bunny: bugs arrive from the right */
+  position: absolute; bottom: 4%; right: 2%; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; align-items: center;   /* bottom right on the dirt, like the home page game */
   font-size: 12px; pointer-events: auto; opacity: 0; visibility: hidden; transition: opacity .4s, visibility .4s;
 }
 .hero.playing .runner-hud { opacity: 1; visibility: visible; }
@@ -107,7 +107,7 @@ footer { text-align: center; color: var(--muted); font-size: 12px; padding: 48px
 }
 .runner-msg.show { opacity: 1; transform: translate(-50%, 0); }
 @media (max-width: 600px) {   /* phones: the banner is small, so the scoreboard sits just above the game, in the empty sky */
-  .runner-hud { bottom: auto; top: -30px; left: 50%; transform: translateX(-50%); font-size: 11px; gap: 4px; white-space: nowrap; }
+  .runner-hud { bottom: auto; top: -30px; left: 2%; justify-content: center; font-size: 11px; gap: 4px; }
   .runner-hud span { padding: 2px 7px; } .runner-msg { font-size: 11px; padding: 5px 10px; }
 }
 @media (prefers-reduced-motion: reduce) {

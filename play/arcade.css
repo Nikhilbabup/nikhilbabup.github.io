@@ -52,3 +52,22 @@ body.in-game .stage, body.in-game .view-bar {
   margin: 0 auto;
 }
 @media (max-width: 480px) { body.in-game .stage, body.in-game .view-bar { padding: 10px; } }
+
+/* full screen: the stage (scoreboard, game and controls) fills the screen, and the game grows as big as it fits at 8:3 */
+.stage-top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.stage-top .hud { flex: 1; margin-bottom: 0; }
+.full-btn {
+  flex: none; display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; cursor: pointer;
+  background: var(--card); border: 2px solid var(--line); color: var(--ink); font: 500 12px "JetBrains Mono", ui-monospace, monospace;
+}
+.full-btn:hover { border-color: var(--coral); color: var(--coral); }
+.full-btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+@media (max-width: 480px) { .full-btn span { display: none; } .full-btn { padding: 5px 10px; } }
+body.in-game .stage.is-full {
+  position: fixed; inset: 0; z-index: 100; width: 100%; max-width: none; margin: 0; border: 0; border-radius: 0;
+  display: flex; flex-direction: column; justify-content: center; padding: 16px; background: var(--bg, #eef4f0);
+}
+.stage.is-full > * { width: min(100%, calc((100vh - 150px) * 8 / 3)); width: min(100%, calc((100dvh - 150px) * 8 / 3)); margin-left: auto; margin-right: auto; }
+.stage.is-full .pad.multi .hook, .stage.is-full .pad .hook { padding-top: 12px; padding-bottom: 12px; }
+.stage:fullscreen::backdrop { background: var(--bg, #eef4f0); }
+body.fake-full { overflow: hidden; }

@@ -112,8 +112,11 @@
       <a class="back-link" id="back" href="arcade.html">← All games</a>
       <span class="view-keys" id="keys"></span>
     </div>
-    <div class="stage" aria-label="Game">
-      <div class="hud" id="hud" role="group" aria-label="Scoreboard"></div>
+    <div class="stage" id="stage" aria-label="Game">
+      <div class="stage-top">
+        <div class="hud" id="hud" role="group" aria-label="Scoreboard"></div>
+        <button class="full-btn" id="fullBtn" type="button" aria-pressed="false" title="Full screen (F)">⛶ <span>Full screen</span></button>
+      </div>
       <div class="field" id="field">
         <div class="overlay" id="overlay">
           <h2 id="overlayTitle"></h2>

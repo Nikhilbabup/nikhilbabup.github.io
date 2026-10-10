@@ -153,7 +153,7 @@ function open(id) {
   cv.hidden = false;
   el.hud.innerHTML = G.hud.map(([k, label, unit]) => '<span>' + label + ' <b data-k="' + k + '">0</b>' + (unit || '') + '</span>').join('');
   el.rules.innerHTML = G.rules.map(r => '<li>' + r + '</li>').join('');
-  el.keys.textContent = G.keys + ' · Esc for all games';
+  el.keys.textContent = G.keys + ' · F full screen · Esc for all games';
   pad.innerHTML = G.pad.map(([a, label, small]) => '<button class="hook" type="button" data-a="' + a + '">' + label + (small ? '<small>' + small + '</small>' : '') + '</button>').join('');
   pad.hidden = !G.pad.length;
   pad.classList.toggle('multi', G.pad.length > 1);
@@ -175,6 +175,7 @@ function open(id) {
 
 function showGrid() {
   const was = active;
+  if (isFull()) exitFull();
   if (active) { ctl().stop(); active = null; }
   view.hidden = true; grid.hidden = false; document.body.classList.remove('in-game');
   el.eyebrow.textContent = home.eyebrow; el.heading.textContent = home.heading; el.lead.textContent = home.lead;
@@ -186,6 +187,38 @@ function showGrid() {
 
 const route = () => { const id = location.hash.slice(1); if (GAMES[id]) open(id); else showGrid(); };
 const toGrid = () => { history.pushState(null, '', location.pathname + location.search); route(); };
+
+/* ---------- full screen ---------- */
+// the real Fullscreen API where there is one; otherwise (iPhone Safari) the stage just covers the window
+const stage = $('stage'), fullBtn = $('fullBtn');
+const canFull = !!(stage.requestFullscreen || stage.webkitRequestFullscreen);
+const isFull = () => stage.classList.contains('is-full');
+function setFull(on) {
+  stage.classList.toggle('is-full', on);
+  document.body.classList.toggle('fake-full', on && !(document.fullscreenElement || document.webkitFullscreenElement));
+  fullBtn.setAttribute('aria-pressed', String(on));
+  fullBtn.querySelector('span').textContent = on ? 'Exit full screen' : 'Full screen';
+  fullBtn.title = (on ? 'Exit full screen' : 'Full screen') + ' (F)';
+  if (active) canvases[active].focus({ preventScroll: true });
+}
+function enterFull() {
+  if (canFull) {
+    const req = stage.requestFullscreen ? stage.requestFullscreen({ navigationUI: 'hide' }) : stage.webkitRequestFullscreen();
+    if (req && req.catch) req.catch(() => setFull(true));        // refused: fall back to covering the window
+    try { screen.orientation.lock('landscape').catch(() => {}); } catch (e) { /* not supported */ }
+  }
+  setFull(true);
+}
+function exitFull() {
+  if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+  else if (document.webkitFullscreenElement) document.webkitExitFullscreen();
+  setFull(false);
+}
+const toggleFull = () => (isFull() ? exitFull() : enterFull());
+['fullscreenchange', 'webkitfullscreenchange'].forEach(t => document.addEventListener(t, () => {
+  if (!(document.fullscreenElement || document.webkitFullscreenElement) && isFull() && !document.body.classList.contains('fake-full')) setFull(false);
+}));
+fullBtn.addEventListener('click', toggleFull);
 
 /* ---------- input ---------- */
 const press = a => { if (active) ctl().press(a); };
@@ -231,7 +264,8 @@ pad.addEventListener('click', e => {                 // keyboard activation of a
 
 document.addEventListener('keydown', e => {
   if (!active || e.ctrlKey || e.metaKey || e.altKey) return;
-  if (e.key === 'Escape') { toGrid(); return; }
+  if (e.key === 'Escape') { if (isFull()) exitFull(); else toGrid(); return; }   // Esc leaves full screen first
+  if (e.code === 'KeyF' && !e.repeat) { e.preventDefault(); toggleFull(); return; }
   const t = e.target, inPad = t && t.closest && t.closest('#pad');
   if (t && t.closest && t.closest('a, button') && !inPad) return;     // don't steal Enter from links
   if (inPad && (e.code === 'Enter' || e.code === 'Space')) return;     // the pad button's own click handles it
