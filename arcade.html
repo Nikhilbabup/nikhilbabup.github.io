@@ -81,6 +81,14 @@
         <span class="card-meta"><span>Best <b data-best="snake">0</b></span><span class="play">Play ▶</span></span>
       </span>
     </button>
+    <button class="game-card" type="button" data-game="memory">
+      <span class="preview"><canvas class="game-canvas" data-preview="memory" width="320" height="120" aria-hidden="true"></canvas></span>
+      <span class="card-body">
+        <span class="card-title">Memory Match</span>
+        <span class="card-text">Eight pairs from around the arcade. Fewer moves and less time score higher.</span>
+        <span class="card-meta"><span>Best <b data-best="memory">0</b></span><span class="play">Play ▶</span></span>
+      </span>
+    </button>
   </section>
 
   <section id="view" class="game-view" hidden>
@@ -114,6 +122,7 @@
 <script src="play/games/eggs.js"></script>
 <script src="play/games/deploy.js"></script>
 <script src="play/games/snake.js"></script>
+<script src="play/games/memory.js"></script>
 <script src="play/arcade.js"></script>
 </body>
 </html>
