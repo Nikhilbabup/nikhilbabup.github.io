@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bunny Arcade</title>
+<meta name="description" content="Pixel-art mini-games starring the bunny: Catch the Fish and Bug Runner. Plain JavaScript and canvas.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Bunny Arcade">
+<meta property="og:description" content="Pixel-art mini-games starring the bunny: Catch the Fish and Bug Runner.">
+<meta name="theme-color" content="#d3e6de">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 7 12' shape-rendering='crispEdges'%3E%3Crect x='1' y='0' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='3' y='0' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='1' y='1' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='3' y='1' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='1' y='2' width='1' height='1' fill='%23eaa5a0'/%3E%3Crect x='3' y='2' width='1' height='1' fill='%23eaa5a0'/%3E%3Crect x='1' y='3' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='2' y='3' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='3' y='3' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='4' y='3' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='0' y='4' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='1' y='4' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='2' y='4' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='3' y='4' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='4' y='4' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='5' y='4' width='1' height='1' fill='%23d8d2c6'/%3E%3Crect x='0' y='5' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='1' y='5' width='1' height='1' fill='%232f3e3a'/%3E%3Crect x='2' y='5' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='3' y='5' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='4' y='5' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='5' y='5' width='1' height='1' fill='%23d8d2c6'/%3E%3Crect x='0' y='6' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='1' y='6' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='2' y='6' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='3' y='6' width='1' height='1' fill='%23eaa5a0'/%3E%3Crect x='4' y='6' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='5' y='6' width='1' height='1' fill='%23d8d2c6'/%3E%3Crect x='1' y='7' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='2' y='7' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='3' y='7' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='4' y='7' width='1' height='1' fill='%23d8d2c6'/%3E%3Crect x='0' y='8' width='1' height='1' fill='%23e0645a'/%3E%3Crect x='1' y='8' width='1' height='1' fill='%23e0645a'/%3E%3Crect x='2' y='8' width='1' height='1' fill='%23e0645a'/%3E%3Crect x='3' y='8' width='1' height='1' fill='%23e0645a'/%3E%3Crect x='4' y='8' width='1' height='1' fill='%23e0645a'/%3E%3Crect x='5' y='8' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='0' y='9' width='1' height='1' fill='%23e0645a'/%3E%3Crect x='1' y='9' width='1' height='1' fill='%23e0645a'/%3E%3Crect x='2' y='9' width='1' height='1' fill='%23e0645a'/%3E%3Crect x='3' y='9' width='1' height='1' fill='%23e0645a'/%3E%3Crect x='4' y='9' width='1' height='1' fill='%23e0645a'/%3E%3Crect x='0' y='10' width='1' height='1' fill='%23e0645a'/%3E%3Crect x='1' y='10' width='1' height='1' fill='%23e0645a'/%3E%3Crect x='2' y='10' width='1' height='1' fill='%23e0645a'/%3E%3Crect x='3' y='10' width='1' height='1' fill='%23e0645a'/%3E%3Crect x='4' y='10' width='1' height='1' fill='%23d8d2c6'/%3E%3Crect x='1' y='11' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='3' y='11' width='1' height='1' fill='%23f7f3ec'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="projects/project.css">
+<link rel="stylesheet" href="play/play.css">
+<link rel="stylesheet" href="play/arcade.css">
+</head>
+<body class="arcade-page">
+
+<header class="hero arcade-head">
+  <nav>
+    <a class="brand" id="arcadeHome" href="arcade.html" aria-label="Bunny Arcade: all games"><svg viewBox="-1 -1 9 14" width="16" height="24" shape-rendering="crispEdges" aria-hidden="true"><rect x="-1" y="-1" width="9" height="14" fill="none"/><rect x="1" y="0" width="1" height="1" fill="#f7f3ec"/><rect x="3" y="0" width="1" height="1" fill="#f7f3ec"/><rect x="1" y="1" width="1" height="1" fill="#f7f3ec"/><rect x="3" y="1" width="1" height="1" fill="#f7f3ec"/><rect x="1" y="2" width="1" height="1" fill="#eaa5a0"/><rect x="3" y="2" width="1" height="1" fill="#eaa5a0"/><rect x="1" y="3" width="1" height="1" fill="#f7f3ec"/><rect x="2" y="3" width="1" height="1" fill="#f7f3ec"/><rect x="3" y="3" width="1" height="1" fill="#f7f3ec"/><rect x="4" y="3" width="1" height="1" fill="#f7f3ec"/><rect x="0" y="4" width="1" height="1" fill="#f7f3ec"/><rect x="1" y="4" width="1" height="1" fill="#f7f3ec"/><rect x="2" y="4" width="1" height="1" fill="#f7f3ec"/><rect x="3" y="4" width="1" height="1" fill="#f7f3ec"/><rect x="4" y="4" width="1" height="1" fill="#f7f3ec"/><rect x="5" y="4" width="1" height="1" fill="#d8d2c6"/><rect x="0" y="5" width="1" height="1" fill="#f7f3ec"/><rect x="1" y="5" width="1" height="1" fill="#2f3e3a"/><rect x="2" y="5" width="1" height="1" fill="#f7f3ec"/><rect x="3" y="5" width="1" height="1" fill="#f7f3ec"/><rect x="4" y="5" width="1" height="1" fill="#f7f3ec"/><rect x="5" y="5" width="1" height="1" fill="#d8d2c6"/><rect x="0" y="6" width="1" height="1" fill="#f7f3ec"/><rect x="1" y="6" width="1" height="1" fill="#f7f3ec"/><rect x="2" y="6" width="1" height="1" fill="#f7f3ec"/><rect x="3" y="6" width="1" height="1" fill="#eaa5a0"/><rect x="4" y="6" width="1" height="1" fill="#f7f3ec"/><rect x="5" y="6" width="1" height="1" fill="#d8d2c6"/><rect x="1" y="7" width="1" height="1" fill="#f7f3ec"/><rect x="2" y="7" width="1" height="1" fill="#f7f3ec"/><rect x="3" y="7" width="1" height="1" fill="#f7f3ec"/><rect x="4" y="7" width="1" height="1" fill="#d8d2c6"/><rect x="0" y="8" width="1" height="1" fill="#e0645a"/><rect x="1" y="8" width="1" height="1" fill="#e0645a"/><rect x="2" y="8" width="1" height="1" fill="#e0645a"/><rect x="3" y="8" width="1" height="1" fill="#e0645a"/><rect x="4" y="8" width="1" height="1" fill="#e0645a"/><rect x="5" y="8" width="1" height="1" fill="#f7f3ec"/><rect x="0" y="9" width="1" height="1" fill="#e0645a"/><rect x="1" y="9" width="1" height="1" fill="#e0645a"/><rect x="2" y="9" width="1" height="1" fill="#e0645a"/><rect x="3" y="9" width="1" height="1" fill="#e0645a"/><rect x="4" y="9" width="1" height="1" fill="#e0645a"/><rect x="0" y="10" width="1" height="1" fill="#e0645a"/><rect x="1" y="10" width="1" height="1" fill="#e0645a"/><rect x="2" y="10" width="1" height="1" fill="#e0645a"/><rect x="3" y="10" width="1" height="1" fill="#e0645a"/><rect x="4" y="10" width="1" height="1" fill="#d8d2c6"/><rect x="1" y="11" width="1" height="1" fill="#f7f3ec"/><rect x="3" y="11" width="1" height="1" fill="#f7f3ec"/></svg>Bunny Arcade</a>
+    <a class="nav-link" href="index.html">Portfolio</a>
+  </nav>
+  <div class="hero-content">
+    <div class="eyebrow" id="eyebrow">Mini games</div>
+    <h1 id="heading">Pick a game</h1>
+    <p class="lead" id="lead">The bunny has a few hobbies. Choose one and play it right here.</p>
+  </div>
+</header>
+
+<main>
+  <section id="grid" class="arcade-grid" aria-label="Games">
+    <button class="game-card" type="button" data-game="fish">
+      <span class="preview"><canvas class="game-canvas" data-preview="fish" width="320" height="120" aria-hidden="true"></canvas></span>
+      <span class="card-body">
+        <span class="card-title">Catch the Fish</span>
+        <span class="card-text">Hook every bite the moment you see the “!”. 60 seconds, golden fish and sneaky boots.</span>
+        <span class="card-meta"><span>Best <b data-best="fish">0</b></span><span class="play">Play ▶</span></span>
+      </span>
+    </button>
+    <button class="game-card" type="button" data-game="runner">
+      <span class="preview"><canvas class="game-canvas" data-preview="runner" width="240" height="90" aria-hidden="true"></canvas></span>
+      <span class="card-body">
+        <span class="card-title">Bug Runner</span>
+        <span class="card-text">Jump the bugs, grab the commits and stay low under the flying ones. How far can you run?</span>
+        <span class="card-meta"><span>Best <b data-best="runner">0</b></span><span class="play">Play ▶</span></span>
+      </span>
+    </button>
+  </section>
+
+  <section id="view" class="game-view" hidden>
+    <div class="view-bar">
+      <a class="back-link" id="back" href="arcade.html">← All games</a>
+      <span class="view-keys" id="keys"></span>
+    </div>
+    <div class="stage" aria-label="Game">
+      <div class="hud" id="hud" role="group" aria-label="Scoreboard"></div>
+      <div class="field" id="field">
+        <div class="overlay" id="overlay">
+          <h2 id="overlayTitle"></h2>
+          <p id="overlayText"></p>
+        </div>
+      </div>
+      <div class="pad" id="pad"></div>
+      <p class="sr" id="status" role="status" aria-live="polite"></p>
+    </div>
+    <section class="card">
+      <h2>How to play</h2>
+      <ul class="rules" id="rules"></ul>
+    </section>
+  </section>
+</main>
+
+<footer>Bunny Arcade · plain JavaScript and canvas</footer>
+<script src="play/game.js"></script>
+<script src="play/runner.js"></script>
+<script src="play/kit.js"></script>
+<script src="play/arcade.js"></script>
+</body>
+</html>

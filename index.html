@@ -83,7 +83,18 @@
     max-width: 760px; margin: 0 auto;
   }
   .hello { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
-  .hello b { color: var(--coral); font-weight: 500; }
+  .name-play {
+    position: relative; font: inherit; font-weight: 500; color: var(--coral);
+    background: none; border: 0; padding: 0; cursor: pointer; display: inline-block;
+  }
+  .name-play:hover { text-decoration: underline dotted; text-underline-offset: 3px; }
+  .name-play:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 3px; }
+  .name-play::after {
+    content: attr(data-tip); position: absolute; left: 50%; bottom: 100%; transform: translate(-50%, 2px);
+    white-space: nowrap; background: var(--ink); color: #fff; font-size: 11.5px; padding: 3px 9px; border-radius: 999px;
+    opacity: 0; transition: opacity .2s, transform .2s; pointer-events: none;
+  }
+  .name-play:hover::after, .name-play:focus-visible::after { opacity: 1; transform: translate(-50%, -4px); }
   h1 {
     font-size: clamp(30px, 5.2vw, 50px); font-weight: 800;
     line-height: 1.22; letter-spacing: -0.01em;
@@ -261,7 +272,7 @@
   </nav>
 
   <div class="hero-content">
-    <div class="hello">Hi, I'm <b>Nikhil</b> — Backend Engineer</div>
+    <div class="hello">Hi, I'm <a class="name-play" href="arcade.html" data-tip="Game arcade ▶" aria-label="Nikhil (open the Bunny Arcade)">Nikhil</a> — Backend Engineer</div>
     <h1>Where Clean Code<br>Meets Calm Systems.</h1>
     <p class="lead">
       4+ years building APIs in Node.js and TypeScript, from ATM and POS payment
