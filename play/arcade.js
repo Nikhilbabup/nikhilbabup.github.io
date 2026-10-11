@@ -7,11 +7,13 @@ const $ = id => document.getElementById(id);
 const grid = $('grid'), view = $('view'), field = $('field'), overlay = $('overlay');
 const el = { eyebrow: $('eyebrow'), heading: $('heading'), lead: $('lead'), hud: $('hud'), keys: $('keys'), rules: $('rules'),
   title: $('overlayTitle'), text: $('overlayText'), status: $('status'),
-  score: $('overlayScore'), stars: $('overlayStars'), stats: $('overlayStats'), ribbon: $('overlayRibbon'), count: $('countdown') };
+  score: $('overlayScore'), stars: $('overlayStars'), stats: $('overlayStats'), ribbon: $('overlayRibbon'), count: $('countdown'), cta: $('overlayCta') };
+const touch = matchMedia('(hover: none)').matches;   // phones and tablets: the overlay asks for a tap
 const home = { eyebrow: el.eyebrow.textContent, heading: el.heading.textContent, lead: el.lead.textContent, title: document.title };
 const say = msg => { el.status.textContent = msg; };
 const showOverlay = (title, text) => {
   el.title.textContent = title; el.text.textContent = text;
+  el.cta.textContent = touch ? 'Tap to play' : 'Click to play';
   el.score.hidden = el.stars.hidden = el.stats.hidden = el.ribbon.hidden = true;
   overlay.hidden = false;
 };
@@ -26,6 +28,7 @@ function showEnd(G, e, s, best, title, text) {
   el.stats.innerHTML = st.map(([k, v]) => '<span>' + k + ' <b>' + v + '</b></span>').join(''); el.stats.hidden = !st.length;
   el.ribbon.hidden = !isBest;
   el.text.textContent = (isBest ? 'A new best! ' : 'Best: ' + best + '. ') + 'Press Enter or tap to play again.';
+  el.cta.textContent = touch ? 'Tap to play again' : 'Click to play again';
   overlay.hidden = false;
   if (isBest || e.win) { if (juice) juice.confetti(); Sfx.play('win'); } else Sfx.play('lose');
   say(title + ' ' + text);
@@ -262,7 +265,8 @@ function open(id) {
   field.classList.remove('wipe'); void field.offsetWidth; field.classList.add('wipe');   // an iris opens onto the game
   clearTimeout(wipeTimer); wipeTimer = setTimeout(() => field.classList.remove('wipe'), 500);
   grid.hidden = true; view.hidden = false; document.body.classList.add('in-game');
-  scrollTo({ top: 0 });
+  if (innerWidth > innerHeight && innerHeight < 500) stage.scrollIntoView({ block: 'start' });   // a phone on its side: the game fills the screen
+  else scrollTo({ top: 0 });
   cv.focus({ preventScroll: true });
 }
 

@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <script>/* dark mode before first paint (assets/sky.js) */try{var t=localStorage.getItem("theme");if(t==="dark"||(!t&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.dataset.theme="dark"}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
 <title>Bunny Arcade</title>
 <meta name="description" content="Ten pixel-art games starring the bunny, from the Bunny Quest platformer to Catch the Fish, Deploy Pipeline and Queue Sorter. Plain JavaScript and canvas.">
 <meta property="og:type" content="website">
@@ -14,9 +15,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="projects/project.css">
-<link rel="stylesheet" href="play/play.css">
-<link rel="stylesheet" href="play/arcade.css">
+<link rel="stylesheet" href="projects/project.css?v=4">
+<link rel="stylesheet" href="play/play.css?v=4">
+<link rel="stylesheet" href="play/arcade.css?v=4">
 </head>
 <body class="arcade-page">
 
@@ -24,7 +25,7 @@
   <nav>
     <a class="brand" id="arcadeHome" href="arcade.html" aria-label="Bunny Arcade: all games"><svg viewBox="-1 -1 9 14" width="16" height="24" shape-rendering="crispEdges" aria-hidden="true"><rect x="-1" y="-1" width="9" height="14" fill="none"/><rect x="1" y="0" width="1" height="1" fill="#f7f3ec"/><rect x="3" y="0" width="1" height="1" fill="#f7f3ec"/><rect x="1" y="1" width="1" height="1" fill="#f7f3ec"/><rect x="3" y="1" width="1" height="1" fill="#f7f3ec"/><rect x="1" y="2" width="1" height="1" fill="#eaa5a0"/><rect x="3" y="2" width="1" height="1" fill="#eaa5a0"/><rect x="1" y="3" width="1" height="1" fill="#f7f3ec"/><rect x="2" y="3" width="1" height="1" fill="#f7f3ec"/><rect x="3" y="3" width="1" height="1" fill="#f7f3ec"/><rect x="4" y="3" width="1" height="1" fill="#f7f3ec"/><rect x="0" y="4" width="1" height="1" fill="#f7f3ec"/><rect x="1" y="4" width="1" height="1" fill="#f7f3ec"/><rect x="2" y="4" width="1" height="1" fill="#f7f3ec"/><rect x="3" y="4" width="1" height="1" fill="#f7f3ec"/><rect x="4" y="4" width="1" height="1" fill="#f7f3ec"/><rect x="5" y="4" width="1" height="1" fill="#d8d2c6"/><rect x="0" y="5" width="1" height="1" fill="#f7f3ec"/><rect x="1" y="5" width="1" height="1" fill="#2f3e3a"/><rect x="2" y="5" width="1" height="1" fill="#f7f3ec"/><rect x="3" y="5" width="1" height="1" fill="#f7f3ec"/><rect x="4" y="5" width="1" height="1" fill="#f7f3ec"/><rect x="5" y="5" width="1" height="1" fill="#d8d2c6"/><rect x="0" y="6" width="1" height="1" fill="#f7f3ec"/><rect x="1" y="6" width="1" height="1" fill="#f7f3ec"/><rect x="2" y="6" width="1" height="1" fill="#f7f3ec"/><rect x="3" y="6" width="1" height="1" fill="#eaa5a0"/><rect x="4" y="6" width="1" height="1" fill="#f7f3ec"/><rect x="5" y="6" width="1" height="1" fill="#d8d2c6"/><rect x="1" y="7" width="1" height="1" fill="#f7f3ec"/><rect x="2" y="7" width="1" height="1" fill="#f7f3ec"/><rect x="3" y="7" width="1" height="1" fill="#f7f3ec"/><rect x="4" y="7" width="1" height="1" fill="#d8d2c6"/><rect x="0" y="8" width="1" height="1" fill="#e0645a"/><rect x="1" y="8" width="1" height="1" fill="#e0645a"/><rect x="2" y="8" width="1" height="1" fill="#e0645a"/><rect x="3" y="8" width="1" height="1" fill="#e0645a"/><rect x="4" y="8" width="1" height="1" fill="#e0645a"/><rect x="5" y="8" width="1" height="1" fill="#f7f3ec"/><rect x="0" y="9" width="1" height="1" fill="#e0645a"/><rect x="1" y="9" width="1" height="1" fill="#e0645a"/><rect x="2" y="9" width="1" height="1" fill="#e0645a"/><rect x="3" y="9" width="1" height="1" fill="#e0645a"/><rect x="4" y="9" width="1" height="1" fill="#e0645a"/><rect x="0" y="10" width="1" height="1" fill="#e0645a"/><rect x="1" y="10" width="1" height="1" fill="#e0645a"/><rect x="2" y="10" width="1" height="1" fill="#e0645a"/><rect x="3" y="10" width="1" height="1" fill="#e0645a"/><rect x="4" y="10" width="1" height="1" fill="#d8d2c6"/><rect x="1" y="11" width="1" height="1" fill="#f7f3ec"/><rect x="3" y="11" width="1" height="1" fill="#f7f3ec"/></svg>Bunny Arcade</a>
     <div class="nav-right">
-      <a class="nav-link" href="projects/bunny-arcade.html">How it’s built</a>
+      <a class="nav-link how" href="projects/bunny-arcade.html">How it’s built</a>
       <a class="nav-link" href="index.html">Portfolio</a>
     </div>
   </nav>
@@ -125,6 +126,7 @@
     <div class="view-bar">
       <a class="back-link" id="back" href="arcade.html">← All games</a>
       <span class="view-keys" id="keys"></span>
+      <span class="rotate-hint">Turn sideways for a bigger game</span>
     </div>
     <div class="stage" id="stage" aria-label="Game">
       <div class="hud" id="hud" role="group" aria-label="Scoreboard"></div>
@@ -136,6 +138,7 @@
           <div class="end-stars" id="overlayStars" hidden></div>
           <div class="end-stats" id="overlayStats" hidden></div>
           <p id="overlayText"></p>
+          <span class="tap-cta" id="overlayCta" aria-hidden="true">Tap to play</span>
         </div>
         <div class="countdown" id="countdown" aria-hidden="true" hidden></div>
         <button class="full-btn snd-btn" id="sndBtn" type="button" aria-pressed="false" aria-label="Sound off. Turn sound on" title="Sound (M)"><svg class="ico-on" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" shape-rendering="crispEdges"><path d="M2 6h3l4-4v12l-4-4H2zM11 5h1v6h-1zM13 3h1v10h-1z" fill="currentColor"/></svg><svg class="ico-off" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" shape-rendering="crispEdges"><path d="M2 6h3l4-4v12l-4-4H2zM11 6h1v1h1V6h1v1h-1v1h1v1h-1v1h1v1h-1v-1h-1v1h-1v-1h1V9h-1V8h1V7h-1z" fill="currentColor"/></svg></button>
@@ -151,20 +154,20 @@
 </main>
 
 <footer>Bunny Arcade · plain JavaScript and canvas</footer>
-<script src="assets/sky.js"></script>
-<script src="play/sfx.js"></script>
-<script src="play/juice.js"></script>
-<script src="play/game.js"></script>
-<script src="play/runner.js"></script>
-<script src="play/kit.js"></script>
-<script src="play/games/carrots.js"></script>
-<script src="play/games/eggs.js"></script>
-<script src="play/games/deploy.js"></script>
-<script src="play/games/snake.js"></script>
-<script src="play/games/memory.js"></script>
-<script src="play/games/flap.js"></script>
-<script src="play/games/queue.js"></script>
-<script src="play/games/quest.js"></script>
-<script src="play/arcade.js"></script>
+<script src="assets/sky.js?v=4"></script>
+<script src="play/sfx.js?v=4"></script>
+<script src="play/juice.js?v=4"></script>
+<script src="play/game.js?v=4"></script>
+<script src="play/runner.js?v=4"></script>
+<script src="play/kit.js?v=4"></script>
+<script src="play/games/carrots.js?v=4"></script>
+<script src="play/games/eggs.js?v=4"></script>
+<script src="play/games/deploy.js?v=4"></script>
+<script src="play/games/snake.js?v=4"></script>
+<script src="play/games/memory.js?v=4"></script>
+<script src="play/games/flap.js?v=4"></script>
+<script src="play/games/queue.js?v=4"></script>
+<script src="play/games/quest.js?v=4"></script>
+<script src="play/arcade.js?v=4"></script>
 </body>
 </html>

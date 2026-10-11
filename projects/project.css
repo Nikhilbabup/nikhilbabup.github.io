@@ -1,7 +1,8 @@
 :root {
+  color-scheme: light;
   --bg: #eef4f0; --mint: #d3e6de; --ink: #173f37; --muted: #465f59;
   --coral: #e8625a; --coral-d: #cf4f47; --card: #f9fbf8; --line: #c8dcd2; --chip: #dcebe4;
-  --surface-2: #f4f8f5; --surface-3: #ffffff; --tag-ink: #2f5a4f; --glass: var(--glass); --glass-2: var(--glass-2); --on-ink: #ffffff;
+  --surface-2: #f4f8f5; --surface-3: #ffffff; --tag-ink: #2f5a4f; --glass: rgba(249, 251, 248, .88); --glass-2: rgba(249, 251, 248, .92); --on-ink: #ffffff;
 }
 
 /* dark mode: the night sky after the sunset (assets/sky.js switches it from the banner's sun and moon) */
