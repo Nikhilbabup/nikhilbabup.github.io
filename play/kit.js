@@ -45,6 +45,20 @@ function sprite(g, s, x, y, { flip = false, outline = null, pal = null, scale = 
   s.rows.forEach((row, j) => [...row].forEach((ch, i) => { if (at(i, j)) put(i, j, at(i, j)); }));
 }
 const size = s => ({ w: Math.max(...s.rows.map(r => r.length)), h: s.rows.length });
+// squash and stretch that stays crisp pixel art: draw the sprite unscaled, then scale the copy with smoothing off.
+// (x, footY) is the sprite's left edge and the line its feet stand on; sx / sy scale around the feet.
+const scratch = typeof document !== 'undefined' ? document.createElement('canvas') : null;
+function spriteScaled(g, s, x, footY, sx, sy, opts = {}) {
+  if (Math.abs(sx - 1) < 0.02 && Math.abs(sy - 1) < 0.02) { sprite(g, s, x, footY - s.rows.length, opts); return; }
+  const { w, h } = size(s), pad = opts.outline ? 1 : 0;
+  scratch.width = w + pad * 2; scratch.height = h + pad * 2;
+  const sg = scratch.getContext('2d'); sg.clearRect(0, 0, scratch.width, scratch.height);
+  sprite(sg, s, pad, pad, opts);
+  const dw = Math.round(scratch.width * sx), dh = Math.round(scratch.height * sy);
+  const smooth = g.imageSmoothingEnabled; g.imageSmoothingEnabled = false;
+  g.drawImage(scratch, Math.round(x - pad + (scratch.width - dw) / 2), Math.round(footY + pad - dh), dw, dh);
+  g.imageSmoothingEnabled = smooth;
+}
 
 // a 3×5 pixel font: each glyph is five rows of three bits
 const FONT = {
@@ -205,7 +219,7 @@ function mount(cv, def, opts = {}) {
   cv.width = def.W; cv.height = def.H;
   const r = def.renderer(cv), held = new Set(), memo = {};
   const fresh = () => { const g = def.create(newSeed()); if (opts.autoplay) g.state.demo = true; return g; };   // demo: a game playing itself
-  let game = fresh(), queue = [], overAt = 0, raf = 0, last = 0, now = 0, visible = true, restartTimer = 0;
+  let game = fresh(), queue = [], overAt = 0, raf = 0, last = 0, now = 0, visible = true, restartTimer = 0, frozenUntil = 0;
   let best = keep ? loadBest(bestKey) : 0;
   if (typeof IntersectionObserver !== 'undefined') new IntersectionObserver(es => { visible = es[0].isIntersecting; }).observe(cv);
   const act = { press: a => queue.push({ type: 'press', a }), tap: (x, y, kind = 'down') => queue.push({ type: 'tap', x, y, kind }),
@@ -238,7 +252,7 @@ function mount(cv, def, opts = {}) {
     const dt = last ? Math.max(0, Math.min(ts - last, 33)) : 0;      // small, never-negative steps
     last = ts; now = ts;
     if (!visible || document.hidden) return;
-    tick(dt);
+    if (ts >= frozenUntil) tick(dt);                 // hit-stop: keep drawing, but hold the game still
     r.render(game.state, ts);
     if (opts.onFrame) opts.onFrame(game.state, best);
   }
@@ -255,12 +269,13 @@ function mount(cv, def, opts = {}) {
     },
     stop() { cancelAnimationFrame(raf); raf = 0; clearTimeout(restartTimer); held.clear(); },
     reset() { game = fresh(); queue = []; held.clear(); clearMemo(); if (r.clear) r.clear(); r.render(game.state, now); },
+    freeze(ms) { frozenUntil = Math.max(frozenUntil, (now || performance.now()) + ms); },   // timed in frame time
     get state() { return game.state; },
     get best() { return best; },
     game: () => game, render: (s, t) => r.render(s, t), frame, tick             // for tests
   };
 }
 
-Object.assign(api, { C, px, rect, sprite, size, text, textWidth, SPR, backdrop, drawBackdrop, effects, mount, reduced });
+Object.assign(api, { C, px, rect, sprite, spriteScaled, size, text, textWidth, SPR, backdrop, drawBackdrop, effects, mount, reduced });
 window.Arcade = api;
 })();

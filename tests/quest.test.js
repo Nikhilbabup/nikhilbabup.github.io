@@ -116,3 +116,17 @@ test('the self-playing bot finishes all three levels', () => {
   }
   assert.ok(s.won, `the bot reached level ${s.level + 1} with ${s.lives} lives`);
 });
+
+test('jumps and landings report where they happen, for the dust and squash effects', () => {
+  const g = started(6), s = g.state;
+  clearEnemies(s);
+  s.p.x = 3 * T; s.p.vx = 0; g.step(300, input());
+  const ev = [];
+  ev.push(...g.step(16, input(['jump'], ['jump'])));
+  for (let t = 0; t < 900; t += 16) ev.push(...g.step(16, input(['jump'])));
+  const jump = ev.find(e => e.type === 'jump'), land = ev.find(e => e.type === 'land');
+  assert.ok(jump && land, 'a jump and a landing');
+  assert.equal(land.y, FLOOR * T, 'lands on the floor line');
+  assert.ok(Math.abs(jump.x - (s.p.x + s.p.w / 2)) < 1);
+  assert.equal(s.p.landAt > s.p.jumpAt, true, 'the renderer can time the squash');
+});

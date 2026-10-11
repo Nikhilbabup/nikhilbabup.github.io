@@ -130,9 +130,15 @@
       <div class="hud" id="hud" role="group" aria-label="Scoreboard"></div>
       <div class="field" id="field">
         <div class="overlay" id="overlay">
+          <span class="ribbon" id="overlayRibbon" hidden>New best!</span>
           <h2 id="overlayTitle"></h2>
+          <div class="end-score" id="overlayScore" hidden></div>
+          <div class="end-stars" id="overlayStars" hidden></div>
+          <div class="end-stats" id="overlayStats" hidden></div>
           <p id="overlayText"></p>
         </div>
+        <div class="countdown" id="countdown" aria-hidden="true" hidden></div>
+        <button class="full-btn snd-btn" id="sndBtn" type="button" aria-pressed="false" aria-label="Sound off. Turn sound on" title="Sound (M)"><svg class="ico-on" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" shape-rendering="crispEdges"><path d="M2 6h3l4-4v12l-4-4H2zM11 5h1v6h-1zM13 3h1v10h-1z" fill="currentColor"/></svg><svg class="ico-off" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" shape-rendering="crispEdges"><path d="M2 6h3l4-4v12l-4-4H2zM11 6h1v1h1V6h1v1h-1v1h1v1h-1v1h1v1h-1v-1h-1v1h-1v-1h1V9h-1V8h1V7h-1z" fill="currentColor"/></svg></button>
         <button class="full-btn" id="fullBtn" type="button" aria-pressed="false" aria-label="Full screen" title="Full screen (F)"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" shape-rendering="crispEdges"><path d="M1 1h5v2H3v3H1zM10 1h5v5h-2V3h-3zM1 10h2v3h3v2H1zM13 10h2v5h-5v-2h3z" fill="currentColor"/></svg></button>
       </div>
       <p class="sr" id="status" role="status" aria-live="polite"></p>
@@ -145,6 +151,9 @@
 </main>
 
 <footer>Bunny Arcade · plain JavaScript and canvas</footer>
+<script src="assets/sky.js"></script>
+<script src="play/sfx.js"></script>
+<script src="play/juice.js"></script>
 <script src="play/game.js"></script>
 <script src="play/runner.js"></script>
 <script src="play/kit.js"></script>

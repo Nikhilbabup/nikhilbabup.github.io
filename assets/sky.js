@@ -71,7 +71,8 @@ function place({ x, y, W = 320, H = 120 }) {
   const cel = document.createElement('canvas'); cel.width = W; cel.height = H;
   const r = (() => { let s = 99; return () => (s = (s * 16807) % 2147483647) / 2147483647; })();
   const stars = Array.from({ length: 22 }, () => ({ x: Math.floor(r() * W), y: Math.floor(4 + r() * H * 0.42), big: r() < 0.25, ph: r() * 6 }));
-  return { x, y, W, H, low: H + 8, cel, stars };
+  const flies = Array.from({ length: 8 }, () => ({ x: Math.floor(10 + r() * (W - 20)), y: Math.floor(H * 0.5 + r() * H * 0.32), ph: r() * 6.28 }));
+  return { x, y, W, H, low: H + 8, cel, stars, flies };
 }
 const at = (p, b) => b.rise                              // k: 0 at rest, 1 fully set or not yet risen
   ? { x: Math.round(p.x - 22 * b.k), y: Math.round(p.y + (p.low - p.y) * easeIn(b.k)) }
@@ -117,12 +118,13 @@ function drawCelestial(p, L, t) {
 }
 
 // Call after the scene is drawn: tints the scene for dusk / night, then puts the sky behind it.
-function paint(ctx, p) {
+// opts.strength (0–1) softens the night tint for games full of cards and labels that must stay readable.
+function paint(ctx, p, { strength = 1 } = {}) {
   const t = performance.now(), L = look(t), W = ctx.canvas.width, H = ctx.canvas.height;
   ctx.save();
   ctx.globalCompositeOperation = 'source-atop';      // only what the scene drew: trees, ground, water, bunny...
   if (L.glow > 0) { ctx.fillStyle = 'rgba(' + L.warm.join(',') + ',' + (0.2 * L.glow).toFixed(3) + ')'; ctx.fillRect(0, 0, W, H); }
-  if (L.dark > 0) { ctx.fillStyle = 'rgba(12, 20, 44, ' + (0.48 * L.dark).toFixed(3) + ')'; ctx.fillRect(0, 0, W, H); }
+  if (L.dark > 0) { ctx.fillStyle = 'rgba(12, 20, 44, ' + (0.48 * L.dark * strength).toFixed(3) + ')'; ctx.fillRect(0, 0, W, H); }
   ctx.globalCompositeOperation = 'destination-over'; // behind the scene: the sun, moon and stars...
   ctx.drawImage(drawCelestial(p, L, t), 0, 0);
   if (L.glow > 0) {                                  // ...and behind them, a warm glow rising from the horizon
@@ -131,6 +133,19 @@ function paint(ctx, p) {
     grad.addColorStop(0.45, 'rgba(234,165,160,' + (a * 0.55).toFixed(3) + ')');
     grad.addColorStop(1, 'rgba(234,165,160,0)');    // fades out at the top, into the page's own sky colour
     ctx.fillStyle = grad; ctx.fillRect(0, 0, W, H);
+  }
+  if (L.dark > 0.4 && p.flies) {                      // fireflies drift and blink over the scene after dark
+    ctx.globalCompositeOperation = 'source-over';
+    const k = (L.dark - 0.4) / 0.6;
+    p.flies.forEach(f => {
+      const x = Math.round(f.x + Math.sin(t / 1700 + f.ph) * 10), y = Math.round(f.y + Math.sin(t / 1300 + f.ph * 2) * 5);
+      const glow = reduced ? 0.8 : Math.max(0, Math.sin(t / 420 + f.ph * 3));
+      if (glow < 0.05) return;
+      ctx.globalAlpha = 0.25 * glow * k; ctx.fillStyle = '#f6e7b8';
+      ctx.fillRect(x - 1, y, 3, 1); ctx.fillRect(x, y - 1, 1, 3);
+      ctx.globalAlpha = glow * k; ctx.fillStyle = '#fff3b0'; ctx.fillRect(x, y, 1, 1);
+    });
+    ctx.globalAlpha = 1;
   }
   ctx.restore();
 }

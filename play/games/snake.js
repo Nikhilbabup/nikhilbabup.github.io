@@ -140,6 +140,13 @@ def.ui = {
   keys: 'Arrows / WASD / swipe', tap: true, swipe: true,
   keymap: { ArrowUp: 'up', KeyW: 'up', ArrowDown: 'down', KeyS: 'down', ArrowLeft: 'left', KeyA: 'left', ArrowRight: 'right', KeyD: 'right' },
   hud: [['score', 'Carrots'], ['length', 'Bunnies'], ['best', 'Best']],
+  night: 0.5,
+  feel: {
+    eat: e => ({ sfx: 'coin', x: e.x * CELL + 4, y: e.y * CELL + 4, ring: '#e8b04a', burst: [['#e8843a', '#5f9a5a'], 6] }),
+    crash: e => ({ sfx: 'hit', shake: 3, stop: 90, x: K.clamp(e.x, 0, COLS - 1) * CELL + 4, y: K.clamp(e.y, 0, ROWS - 1) * CELL + 4, burst: [['#f7f3ec', '#eaa5a0', '#e0645a'], 10] })
+  },
+  stats: s => [['Bunnies', s.body.length]],
+  stars: [8, 20, 35],
   values: (s, best) => ({ score: s.score, length: s.body.length, best }),
   intro: ['Bunny Hop', 'Steer with the arrow keys or WASD, swipe, or tap where you want to turn. Eat carrots, avoid the fence and your own line.'],
   rules: [

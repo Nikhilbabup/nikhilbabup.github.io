@@ -123,6 +123,14 @@ def.ui = {
   keys: 'Space / Enter / tap', tap: true,
   keymap: { Space: 'act', Enter: 'act', ArrowUp: 'act' },
   hud: [['score', 'Score'], ['releases', 'Releases'], ['lives', 'Lives'], ['best', 'Best']],
+  night: 0.35,
+  feel: {
+    pass: (e, s) => ({ sfx: 'pass', x: Math.round(s.pos), y: BAR_Y + 5, ring: e.perfect ? '#e8b04a' : '#6fbf73', burst: e.perfect ? [['#e8b04a', '#f7f3ec'], 10] : null }),
+    ship: () => ({ sfx: 'win', x: W / 2, y: 30, burst: [['#6fbf73', '#e8b04a', '#f7f3ec', '#e0645a'], 24, { spread: 80, up: 60 }] }),
+    fail: (e, s) => ({ sfx: 'hit', shake: 3, x: Math.round(s.pos), y: BAR_Y + 5, burst: [['#e0645a', '#2f3e3a'], 8] })
+  },
+  stats: s => [['Releases', s.releases]],
+  stars: [150, 400, 800],
   values: (s, best) => ({ score: s.score, releases: s.releases, lives: hearts(s.lives), best }),
   intro: ['Deploy Pipeline', 'Press Space, Enter or tap when the red marker is inside the green window. Pass all four stages to ship a release.'],
   rules: [

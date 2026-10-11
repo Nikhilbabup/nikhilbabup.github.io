@@ -135,6 +135,14 @@ def.ui = {
   keys: 'Tap / arrows + Space', tap: true,
   keymap: { ArrowLeft: 'left', KeyA: 'left', ArrowRight: 'right', KeyD: 'right', ArrowUp: 'up', KeyW: 'up', ArrowDown: 'down', KeyS: 'down', Space: 'act', Enter: 'act' },
   hud: [['pairs', 'Pairs', '/8'], ['moves', 'Moves'], ['time', 'Time', 's'], ['best', 'Best']],
+  night: 0.25,
+  feel: {
+    flip: () => ({ sfx: 'click' }),
+    match: e => ({ sfx: 'coin', x: X0 + (e.cards[1] % COLS) * (CW + GAP) + CW / 2, y: Y0 + Math.floor(e.cards[1] / COLS) * (CH + GAP) + CH / 2, ring: '#e8b04a', burst: [['#e8b04a', '#6fbf73'], 8] }),
+    nomatch: () => ({ sfx: 'miss' })
+  },
+  stats: s => [['Moves', s.moves], ['Time', Math.round(s.t / 1000) + 's']],
+  stars: [500, 700, 850],
   values: (s, best) => ({ pairs: s.pairs, moves: s.moves, time: Math.floor(s.t / 1000), best }),
   intro: ['Memory Match', 'Tap a card to flip it, or use the arrow keys and Space. Find all eight pairs.'],
   rules: [

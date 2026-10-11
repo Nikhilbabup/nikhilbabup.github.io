@@ -63,7 +63,7 @@ function createRunner(seed = 1, opts = {}) {
     if (s.phase === 'ready') {
       if (pressed) {
         s.phase = 'run'; ev.push({ type: 'start' });
-        if (cfg.introJump) { s.vy = JUMP_V; ev.push({ type: 'jump' }); }   // an excited hop before the sprint
+        if (cfg.introJump) { s.vy = JUMP_V; s.jumpAt = s.t; ev.push({ type: 'jump' }); }   // an excited hop before the sprint
       }
       return ev;
     }
@@ -77,11 +77,11 @@ function createRunner(seed = 1, opts = {}) {
     // jump, with a short buffer so a press just before landing still counts
     if (pressed) s.buffered = BUFFER_MS;
     const grounded = s.y === 0 && s.vy === 0;
-    if (s.buffered > 0 && grounded) { s.vy = JUMP_V; s.buffered = 0; ev.push({ type: 'jump' }); }
+    if (s.buffered > 0 && grounded) { s.vy = JUMP_V; s.buffered = 0; s.jumpAt = s.t; ev.push({ type: 'jump' }); }
     else s.buffered = Math.max(0, s.buffered - dt);
     if (s.y > 0 || s.vy > 0) {
       s.y += s.vy * dt; s.vy -= GRAVITY * dt;
-      if (s.y <= 0 && s.vy < 0) { s.y = 0; s.vy = 0; ev.push({ type: 'land' }); }   // only while falling, so a 0ms frame can't cancel a jump
+      if (s.y <= 0 && s.vy < 0) { s.y = 0; s.vy = 0; s.landAt = s.t; ev.push({ type: 'land' }); }   // only while falling, so a 0ms frame can't cancel a jump
     }
 
     // scroll the world
@@ -176,6 +176,16 @@ const FLY = [
 const COMMIT_SPR = { pal: { g: '#4f9a55', w: '#e5f4e6' }, rows: ['.ggg.', 'gwwwg', 'gwgwg', 'gwwwg', '.ggg.'] };
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// squash and stretch that stays crisp: draw the sprite unscaled, then scale the copy around its feet with smoothing off
+const scratch = document.createElement('canvas');
+function spriteScaled(g, s, x, footY, sx, sy, opts) {
+  if (Math.abs(sx - 1) < 0.02 && Math.abs(sy - 1) < 0.02) { sprite(g, s, x, footY - s.rows.length, opts); return; }
+  const w = Math.max(...s.rows.map(r => r.length)) + 2, h = s.rows.length + 2;
+  scratch.width = w; scratch.height = h;
+  const sg = scratch.getContext('2d'); sg.clearRect(0, 0, w, h); sprite(sg, s, 1, 1, opts);
+  const dw = Math.round(w * sx), dh = Math.round(h * sy);
+  g.imageSmoothingEnabled = false; g.drawImage(scratch, Math.round(x - 1 + (w - dw) / 2), Math.round(footY + 1 - dh), dw, dh);
+}
 
 // parallax layers, each one screen wide and drawn twice side by side (built once per world size)
 const layerCache = {};
@@ -255,7 +265,10 @@ function makeRenderer(cv, world = {}, prelude = null) {
     const air = s.y > 0, by = Math.round(G2 - BUNNY_H - s.y), bx = Math.round(s.bx);
     const step = ((Math.floor(s.dist / 7) % 2) + 2) % 2;
     const frame = air ? BUNNY_AIR : BUNNY_RUN[s.phase === 'run' && s.speed > 0.02 ? step : 0];
-    sprite(sg, frame, bx, by, { flip: true, outline: '#8c7f78', pal: s.phase === 'over' ? { k: '#8c7f78' } : null });
+    const since = at => (at === undefined || s.t === at) ? 1e9 : s.t - at;   // the very first frame stays unscaled, so the banner swap is seamless
+    const up = Math.max(0, 1 - since(s.jumpAt) / 140), down = Math.max(0, 1 - since(s.landAt) / 140);
+    spriteScaled(sg, frame, bx, by + BUNNY_H, 1 - 0.14 * up + 0.22 * down, 1 + 0.2 * up - 0.24 * down,   // stretch on take-off, squash on landing
+      { flip: true, outline: '#8c7f78', pal: s.phase === 'over' ? { k: '#8c7f78' } : null });
     if (s.phase === 'over') [[0, -3], [6, -4], [3, -6]].forEach(([dx, dy], i) => {
       if (reduced || Math.floor(now / 160 + i) % 2) px(sg, bx + dx, by + dy, C.gold);
     });

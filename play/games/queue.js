@@ -130,6 +130,15 @@ def.ui = {
   keys: '↑ → ↓ / 1 2 3 / tap', tap: true,
   keymap: { ArrowUp: 'top', KeyW: 'top', Digit1: 'top', ArrowRight: 'mid', KeyD: 'mid', Digit2: 'mid', ArrowDown: 'bot', KeyS: 'bot', Digit3: 'bot' },
   hud: [['score', 'Score'], ['queue', 'Queue', '/' + QUEUE_MAX], ['lives', 'Lives'], ['best', 'Best']],
+  night: 0.3,
+  feel: {
+    route: e => e.ok
+      ? { sfx: 'coin', x: SX + SW - 8, y: LANES[e.lane].y + SH / 2, ring: '#e8b04a' }
+      : { sfx: 'hit', shake: 2, x: SX + SW / 2, y: LANES[e.lane].y + SH / 2, burst: [['#e0645a', '#2f3e3a'], 8] },
+    overflow: () => ({ sfx: 'lose', shake: 4, stop: 120 })
+  },
+  stats: s => [['Routed', s.routed]],
+  stars: [200, 500, 900],
   values: (s, best) => ({ score: s.score, queue: s.reqs.length, lives: hearts(s.lives), best }),
   intro: ['Queue Sorter', 'Route the request at the front: ↑ for GET (cache), → for POST (DB), ↓ for 500 errors (logs). Or tap the server.'],
   rules: [

@@ -78,7 +78,8 @@ def.renderer = cv => {
       // the bunny, bobbing on the ready screen, with a spinning propeller hat
       const bob = s.phase === 'ready' && !reduced ? Math.round(Math.sin(now / 260) * 2) : 0;
       const y = Math.round(s.y) + bob, over = s.phase === 'over';
-      sprite(g, s.vy < 0 && !over ? SPR.bunnyAir : SPR.bunny, BX, y, { flip: true, outline: C.outline, pal: over ? { k: C.outline } : null });
+      const k = over ? 0 : Math.max(0, 1 - (s.t - s.flapAt) / 160);   // stretch up for a moment after each flap
+      K.spriteScaled(g, s.vy < 0 && !over ? SPR.bunnyAir : SPR.bunny, BX, y + BH, 1 - 0.14 * k, 1 + 0.2 * k, { flip: true, outline: C.outline, pal: over ? { k: C.outline } : null });
       const spin = over ? 0 : Math.floor(now / (s.t - s.flapAt < 200 ? 40 : 90)) % 2;
       rect(g, BX + 4, y - 2, 1, 2, C.ink);
       if (spin) rect(g, BX + 1, y - 3, 7, 1, C.red); else rect(g, BX + 3, y - 3, 3, 1, C.redD);
@@ -98,6 +99,13 @@ def.ui = {
   keys: 'Space / ↑ / tap', tap: true,
   keymap: { Space: 'act', Enter: 'act', ArrowUp: 'act', KeyW: 'act' },
   hud: [['score', 'Racks'], ['best', 'Best']],
+  feel: {
+    flap: (e, s) => ({ sfx: 'flap', x: BX + 3, y: Math.round(s.y) + 12, burst: [['#f7f3ec', '#d3e6de'], 3, { up: -10, spread: 12, gravity: 60, life: 300 }] }),
+    pass: () => ({ sfx: 'pass' }),
+    crash: (e, s) => ({ sfx: 'hit', shake: 4, stop: 100, x: BX + 3, y: Math.round(s.y) + 6, burst: [['#f7f3ec', '#e0645a', '#55675f'], 12] })
+  },
+  stats: s => [['Racks', s.score]],
+  stars: [5, 15, 30],
   values: (s, best) => ({ score: s.score, best }),
   intro: ['Bunny Flap', 'Press Space, ↑ or tap to flap. Fly through the gaps between the server racks; don’t touch the racks or the ground.'],
   rules: [

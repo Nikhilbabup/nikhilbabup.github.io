@@ -103,7 +103,7 @@ function create(seed = 1, { level = 0 } = {}) {
   function die(ev, why) {
     if (s.mode !== 'run') return;
     s.mode = 'dying'; s.modeAt = s.t; s.p.vx = 0; s.p.vy = why === 'pit' ? 0 : -0.25;
-    ev.push({ type: 'die', why });
+    ev.push({ type: 'die', why, x: s.p.x + s.p.w / 2, y: s.p.y + s.p.h / 2 });
   }
   function bump(cols, r, ev) {
     const p = s.p, mid = p.x + p.w / 2;
@@ -114,7 +114,7 @@ function create(seed = 1, { level = 0 } = {}) {
       s.L.tiles[r][c] = 'u'; s.carrots++; s.score += 10;
       s.pops.push({ x: c * T + 1, y: r * T - 8, t: s.t });
       ev.push({ type: 'block', x: c * T + 4, y: r * T });
-    } else ev.push({ type: 'brick' });
+    } else ev.push({ type: 'brick', x: c * T + 4, y: r * T + T });
     s.L.enemies.forEach(e => {                          // a bug standing on a bumped block gets knocked off
       if (e.alive && Math.abs(e.y + e.h - r * T) < 2 && e.x + e.w > c * T && e.x < c * T + T) {
         e.alive = false; e.flip = true; e.vy = -0.18; s.score += 50; ev.push({ type: 'stomp', x: e.x + 4, y: e.y, how: 'bump' });
@@ -134,7 +134,7 @@ function create(seed = 1, { level = 0 } = {}) {
       p.vx = Math.abs(p.vx) <= f ? 0 : p.vx - Math.sign(p.vx) * f;
     }
     p.coyote = p.ground ? COYOTE : p.coyote - dt;
-    if (s.jumpBuf > 0 && p.coyote > 0) { p.vy = JUMP; p.coyote = 0; s.jumpBuf = 0; p.ground = false; p.plat = null; ev.push({ type: 'jump' }); }
+    if (s.jumpBuf > 0 && p.coyote > 0) { p.vy = JUMP; p.coyote = 0; s.jumpBuf = 0; p.ground = false; p.plat = null; p.jumpAt = s.t; ev.push({ type: 'jump', x: p.x + p.w / 2, y: p.y + p.h }); }
     s.jumpBuf -= dt;
     // let go of jump on the way up and gravity pulls harder: a tap is a hop, a hold is a full jump
     p.vy = Math.min(MAX_FALL, p.vy + (GRAV + (p.vy < 0 && !held.has('jump') ? GRAV * 1.6 : 0)) * dt);
@@ -142,6 +142,7 @@ function create(seed = 1, { level = 0 } = {}) {
     if (moveX(L, p, p.vx * dt)) p.vx = 0;
     p.falling = p.vy > 0;                             // remembered for stomps: landing this step must not turn a stomp into a hit
     const prevBottom = p.y + p.h, res = moveY(L, p, p.vy * dt);
+    const wasUp = !p.ground, fall = p.vy;
     p.ground = false; p.plat = null;
     if (res && res.land) { p.vy = 0; p.ground = true; }
     else if (res && res.head) { p.vy = 0; bump(res.head, res.r, ev); }
@@ -151,6 +152,7 @@ function create(seed = 1, { level = 0 } = {}) {
       }
     });
     if (p.x < 0) { p.x = 0; p.vx = 0; }
+    if (wasUp && p.ground && fall > 0.12) { p.landAt = s.t; ev.push({ type: 'land', x: p.x + p.w / 2, y: p.y + p.h, hard: fall > 0.25 }); }
   }
 
   function stepWorld(dt, ev) {
@@ -295,7 +297,7 @@ function bot(s, act, memo) {
   if (wall || gap || foe || memo.stuck > 20) { act.press('jump'); act.hold('jump', true); memo.jumping = true; memo.at = s.t; }
 }
 
-const def = { id: 'quest', W, H, create, bot, build, LEVELS, T, FLOOR, PW, PH, MAX, MAX_FALL, JUMP, GRAV, TIME, POLE_TOP, POLE_BOTTOM, solidAt };
+const def = { id: 'quest', W, H, create, bot, toScreen: (s, x, y) => [x - Math.round(s.cam), y], build, LEVELS, T, FLOOR, PW, PH, MAX, MAX_FALL, JUMP, GRAV, TIME, POLE_TOP, POLE_BOTTOM, solidAt };
 if (typeof module !== 'undefined') { module.exports = def; return; }
 
 /* ---------- drawing ---------- */
@@ -427,7 +429,9 @@ def.renderer = cv => {
         const air = !p.ground && s.mode !== 'clear';
         const moving = Math.abs(p.vx) > 0.01;
         const frame = s.mode === 'dying' ? SPR.bunnyAir : air ? SPR.bunnyAir : moving ? SPR.bunnyRun[Math.floor(Math.abs(p.x) / 5) % 2] : SPR.bunny;
-        sprite(g, frame, Math.round(p.x) - 1, Math.round(p.y) - 1, { flip: p.face > 0, outline: C.outline, pal: s.mode === 'dying' || s.phase === 'over' && !s.won ? { k: C.outline } : null });
+        const up = Math.max(0, 1 - (s.t - (p.jumpAt ?? -1e9)) / 150), down = Math.max(0, 1 - (s.t - (p.landAt ?? -1e9)) / 150);
+        const sx = 1 - 0.14 * up + 0.22 * down, sy = 1 + 0.2 * up - 0.24 * down;   // stretch on take-off, squash on landing
+        K.spriteScaled(g, frame, Math.round(p.x) - 1, Math.round(p.y + p.h), sx, sy, { flip: p.face > 0, outline: C.outline, pal: s.mode === 'dying' || s.phase === 'over' && !s.won ? { k: C.outline } : null });
       }
       fx.draw(g, now);
       g.restore();
@@ -463,6 +467,20 @@ def.ui = {
   keys: '← → / A D · Space / ↑ to jump', zones: [[0, 1 / 3, 'left'], [1 / 3, 2 / 3, 'right'], [2 / 3, 1, 'jump']],
   keymap: { ArrowLeft: 'left', KeyA: 'left', ArrowRight: 'right', KeyD: 'right', Space: 'jump', ArrowUp: 'jump', KeyW: 'jump', Enter: 'jump' },
   hud: [['score', 'Score'], ['carrots', 'Carrots'], ['lives', 'Lives'], ['level', 'Level'], ['time', 'Time', 's'], ['best', 'Best']],
+  feel: {
+    jump: e => ({ sfx: 'jump', x: e.x, y: e.y, burst: [['#e4d6c0', '#c4a28f'], 4, { up: 12, spread: 22, gravity: 60, life: 320 }] }),
+    land: e => ({ x: e.x, y: e.y, shake: e.hard ? 1 : 0, burst: [['#e4d6c0', '#c4a28f'], e.hard ? 8 : 5, { up: 14, spread: 34, gravity: 70, life: 360 }] }),
+    stomp: e => ({ sfx: 'stomp', shake: 2, stop: 70, x: e.x, y: e.y + 2, burst: [['#e0645a', '#b84a42', '#2f3e3a'], 10] }),
+    carrot: e => ({ sfx: 'coin', x: e.x, y: e.y + 4, ring: '#e8b04a' }),
+    block: e => ({ sfx: 'coin', x: e.x, y: e.y - 6, ring: '#e8b04a', burst: [['#e8b04a', '#f7f3ec'], 6] }),
+    brick: e => ({ sfx: 'click', x: e.x, y: e.y, burst: [['#c0705a', '#7a4c40'], 5, { up: 30 }] }),
+    die: e => ({ sfx: 'hit', shake: 4, stop: 140, x: e.x, y: e.y, burst: [['#f7f3ec', '#e0645a'], 10] }),
+    checkpoint: () => ({ sfx: 'pass' }),
+    flag: e => ({ sfx: 'win', x: e.x, y: e.y, burst: [['#e8b04a', '#6fbf73', '#e0645a', '#f7f3ec'], 16, { spread: 60, up: 70 }] }),
+    cleared: () => ({ confetti: true })
+  },
+  stats: s => [['Carrots', s.carrots], ['Level', (s.level + 1) + '/3'], ['Lives left', s.lives]],
+  stars: [800, 1800, 2600],
   values: (s, best) => ({ score: s.score, carrots: s.carrots, lives: hearts(s.lives), level: (s.level + 1) + '/3', time: Math.ceil(s.timeLeft / 1000), best }),
   intro: ['Bunny Quest', 'Run with ← →, jump with Space or ↑ (hold it to jump higher). On touch screens: hold the left or middle third to run, tap the right third to jump.'],
   rules: [

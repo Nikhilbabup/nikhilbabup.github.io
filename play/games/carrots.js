@@ -115,6 +115,14 @@ def.ui = {
   keymap: { ArrowLeft: 'left', KeyA: 'left', ArrowRight: 'right', KeyD: 'right', Space: 'act', Enter: 'act',
             Digit1: 'h0', Digit2: 'h1', Digit3: 'h2', Digit4: 'h3', Digit5: 'h4', Digit6: 'h5' },
   hud: [['score', 'Score'], ['time', 'Time', 's'], ['pulled', 'Carrots'], ['best', 'Best']],
+  feel: {
+    pull: e => e.kind === 'bug'
+      ? { sfx: 'hit', shake: 2, x: holeX(e.hole), y: GROUND - 6, burst: [['#e0645a', '#2f3e3a'], 8] }
+      : { sfx: 'coin', x: holeX(e.hole), y: GROUND - 8, ring: '#e8b04a', burst: [['#e8843a', '#5f9a5a', '#c4a28f'], 7] },
+    whiff: e => ({ sfx: 'miss', x: holeX(e.hole), y: GROUND, burst: [['#c4a28f', '#a8786a'], 5, { up: 25, spread: 20 }] })
+  },
+  stats: s => [['Carrots', s.pulled], ['Got away', s.missed], ['Bugs pulled', s.bugs]],
+  stars: [15, 30, 45],
   values: (s, best) => ({ score: s.score, time: Math.ceil(s.timeLeft / 1000), pulled: s.pulled, best }),
   intro: ['Carrot Harvest', 'Tap a carrot to pull it, or move with ← → and press Space. Keys 1–6 pull a hole directly. 45 seconds.'],
   rules: [

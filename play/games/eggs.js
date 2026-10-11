@@ -124,6 +124,13 @@ def.ui = {
   keys: '← → / drag / tap', tap: true, drag: true,
   keymap: { ArrowLeft: 'left', KeyA: 'left', ArrowRight: 'right', KeyD: 'right' },
   hud: [['score', 'Score'], ['lives', 'Lives'], ['caught', 'Eggs'], ['best', 'Best']],
+  feel: {
+    catch: e => ({ sfx: 'coin', x: e.x, y: CATCH_Y - 2, ring: e.kind === 'golden' ? '#e8b04a' : '#f7f3ec' }),
+    rotten: e => ({ sfx: 'hit', shake: 2, x: e.x, y: CATCH_Y, burst: [['#a9b49a', '#7f8c6e'], 9] }),
+    splat: e => ({ sfx: 'miss', shake: 1, x: e.x, y: GROUND - 2, burst: [['#f2c94c', '#f7f3ec'], 8, { up: 30 }] })
+  },
+  stats: s => [['Eggs', s.caught]],
+  stars: [15, 40, 80],
   values: (s, best) => ({ score: s.score, lives: hearts(s.lives), caught: s.caught, best }),
   intro: ['Egg Catch', 'Hold ← → or drag to move the basket. Catch every good egg; three broken eggs and it’s over.'],
   rules: [
