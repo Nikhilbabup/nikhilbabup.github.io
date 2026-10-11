@@ -139,7 +139,6 @@ def.ui = {
   title: 'Bunny Hop', lead: 'Lead a line of baby bunnies around the meadow. Every carrot adds one more, and the line keeps getting faster.',
   keys: 'Arrows / WASD / swipe', tap: true, swipe: true,
   keymap: { ArrowUp: 'up', KeyW: 'up', ArrowDown: 'down', KeyS: 'down', ArrowLeft: 'left', KeyA: 'left', ArrowRight: 'right', KeyD: 'right' },
-  pad: [['left', '◀'], ['up', '▲'], ['down', '▼'], ['right', '▶']],
   hud: [['score', 'Carrots'], ['length', 'Bunnies'], ['best', 'Best']],
   values: (s, best) => ({ score: s.score, length: s.body.length, best }),
   intro: ['Bunny Hop', 'Steer with the arrow keys or WASD, swipe, or tap where you want to turn. Eat carrots, avoid the fence and your own line.'],

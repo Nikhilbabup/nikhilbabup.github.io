@@ -3,7 +3,7 @@
    Needs play/game.js (window.FishGame), play/runner.js (window.BugRunner), play/kit.js (window.Arcade) and play/games/*.js. */
 (() => {
 const $ = id => document.getElementById(id);
-const grid = $('grid'), view = $('view'), field = $('field'), overlay = $('overlay'), pad = $('pad');
+const grid = $('grid'), view = $('view'), field = $('field'), overlay = $('overlay');
 const el = { eyebrow: $('eyebrow'), heading: $('heading'), lead: $('lead'), hud: $('hud'), keys: $('keys'), rules: $('rules'),
   title: $('overlayTitle'), text: $('overlayText'), status: $('status') };
 const home = { eyebrow: el.eyebrow.textContent, heading: el.heading.textContent, lead: el.lead.textContent, title: document.title };
@@ -11,12 +11,12 @@ const say = msg => { el.status.textContent = msg; };
 const showOverlay = (title, text) => { el.title.textContent = title; el.text.textContent = text; overlay.hidden = false; };
 const toMap = (codes, a = 'act') => Object.fromEntries(codes.map(c => [c, a]));
 
-/* Each game: title, lead, keys (hint), keymap { code: action }, pad [[action, label, small?]], tap / drag / swipe (pointer
+/* Each game: title, lead, keys (hint), keymap { code: action }, tap / drag / swipe (pointer
    handling on the field), hud, values, intro, rules, bestKey, mount, onEvent, demo (preview opts), demoStart. */
 const GAMES = {
   fish: {
     title: 'Catch the Fish', lead: 'The bunny has been fishing all day. Hook each bite the moment you see the “!”, and beat your best in 60 seconds.',
-    keys: 'Space / Enter / tap', keymap: toMap(['Space', 'Enter']), pad: [['act', 'Hook it!', 'or press Space / Enter']], bestKey: 'fishBest',
+    keys: 'Space / Enter / tap', keymap: toMap(['Space', 'Enter']), bestKey: 'fishBest',
     hud: [['score', 'Score'], ['time', 'Time', 's'], ['mult', 'Combo'], ['best', 'Best']],
     values: (s, best) => ({ score: s.score, time: Math.ceil(s.timeLeft / 1000), mult: '×' + s.mult, best }),
     intro: ['Catch the fish', 'Press Space, Enter or tap to cast. Hook each bite the moment you see the “!”. 60 seconds.'],
@@ -52,7 +52,7 @@ const GAMES = {
   },
   runner: {
     title: 'Bug Runner', lead: 'Ship it before the bugs catch you. Jump the bugs, grab the commits, and see how far the bunny can run.',
-    keys: 'Space / ↑ / tap', keymap: toMap(['Space', 'Enter', 'ArrowUp', 'KeyW']), pad: [['act', 'Jump!', 'or press Space / ↑']], bestKey: 'runnerBest',
+    keys: 'Space / ↑ / tap', keymap: toMap(['Space', 'Enter', 'ArrowUp', 'KeyW']), bestKey: 'runnerBest',
     hud: [['score', 'Score'], ['commits', 'Commits'], ['best', 'Best']],
     values: (s, best) => ({ score: s.score, commits: s.collected, best }),
     intro: ['Bug Runner', 'Press Space, ↑ or tap to jump. Hop over the bugs, grab the commits, and stay low under the flying bugs.'],
@@ -154,9 +154,6 @@ function open(id) {
   el.hud.innerHTML = G.hud.map(([k, label, unit]) => '<span>' + label + ' <b data-k="' + k + '">0</b>' + (unit || '') + '</span>').join('');
   el.rules.innerHTML = G.rules.map(r => '<li>' + r + '</li>').join('');
   el.keys.textContent = G.keys + ' · F full screen · Esc for all games';
-  pad.innerHTML = G.pad.map(([a, label, small]) => '<button class="hook" type="button" data-a="' + a + '">' + label + (small ? '<small>' + small + '</small>' : '') + '</button>').join('');
-  pad.hidden = !G.pad.length;
-  pad.classList.toggle('multi', G.pad.length > 1);
   field.style.touchAction = G.swipe || G.drag ? 'none' : '';
   el.eyebrow.textContent = 'Bunny Arcade'; el.heading.textContent = G.title; el.lead.textContent = G.lead;
   document.title = G.title + ' · Bunny Arcade';
@@ -191,13 +188,16 @@ const toGrid = () => { history.pushState(null, '', location.pathname + location.
 /* ---------- full screen ---------- */
 // the real Fullscreen API where there is one; otherwise (iPhone Safari) the stage just covers the window
 const stage = $('stage'), fullBtn = $('fullBtn');
+const ICON_ON = '<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" shape-rendering="crispEdges"><path d="M1 1h5v2H3v3H1zM10 1h5v5h-2V3h-3zM1 10h2v3h3v2H1zM13 10h2v5h-5v-2h3z" fill="currentColor"/></svg>';
+const ICON_OFF = '<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" shape-rendering="crispEdges"><path d="M4 1h2v5H1V4h3zM10 1h2v3h3v2h-5zM1 10h5v5H4v-3H1zM10 10h5v2h-3v3h-2z" fill="currentColor"/></svg>';
 const canFull = !!(stage.requestFullscreen || stage.webkitRequestFullscreen);
 const isFull = () => stage.classList.contains('is-full');
 function setFull(on) {
   stage.classList.toggle('is-full', on);
   document.body.classList.toggle('fake-full', on && !(document.fullscreenElement || document.webkitFullscreenElement));
   fullBtn.setAttribute('aria-pressed', String(on));
-  fullBtn.querySelector('span').textContent = on ? 'Exit full screen' : 'Full screen';
+  fullBtn.innerHTML = on ? ICON_OFF : ICON_ON;
+  fullBtn.setAttribute('aria-label', on ? 'Exit full screen' : 'Full screen');
   fullBtn.title = (on ? 'Exit full screen' : 'Full screen') + ' (F)';
   if (active) canvases[active].focus({ preventScroll: true });
 }
@@ -229,7 +229,7 @@ function toCanvas(e) {
 }
 let swipe = null, dragging = null;
 field.addEventListener('pointerdown', e => {
-  if (!active) return;
+  if (!active || e.target.closest('.full-btn')) return;   // the full-screen button is not a move
   e.preventDefault();
   const G = GAMES[active];
   if (G.swipe) { swipe = { id: e.pointerId, x: e.clientX, y: e.clientY }; return; }   // decided on release: a swipe or a tap
@@ -249,26 +249,12 @@ addEventListener('pointerup', e => {
 });
 addEventListener('pointercancel', () => { swipe = null; dragging = null; });
 
-// the control pad: hold-to-move buttons send a press on the way down and a release on the way up
-pad.addEventListener('pointerdown', e => {
-  const b = e.target.closest('[data-a]'); if (!b || !active) return;
-  e.preventDefault(); try { b.setPointerCapture(e.pointerId); } catch (err) { /* not an active pointer */ } press(b.dataset.a);
-});
-['pointerup', 'pointercancel', 'lostpointercapture'].forEach(t => pad.addEventListener(t, e => {
-  const b = e.target.closest('[data-a]'); if (b) release(b.dataset.a);
-}));
-pad.addEventListener('click', e => {                 // keyboard activation of a focused pad button (Enter / Space)
-  const b = e.target.closest('[data-a]');
-  if (b && e.detail === 0) { press(b.dataset.a); setTimeout(() => release(b.dataset.a), 150); }
-});
-
 document.addEventListener('keydown', e => {
   if (!active || e.ctrlKey || e.metaKey || e.altKey) return;
   if (e.key === 'Escape') { if (isFull()) exitFull(); else toGrid(); return; }   // Esc leaves full screen first
   if (e.code === 'KeyF' && !e.repeat) { e.preventDefault(); toggleFull(); return; }
-  const t = e.target, inPad = t && t.closest && t.closest('#pad');
-  if (t && t.closest && t.closest('a, button') && !inPad) return;     // don't steal Enter from links
-  if (inPad && (e.code === 'Enter' || e.code === 'Space')) return;     // the pad button's own click handles it
+  const t = e.target;
+  if (t && t.closest && t.closest('a, button')) return;     // don't steal Enter from links and buttons
   const a = GAMES[active].keymap[e.code];
   if (a) { e.preventDefault(); if (!e.repeat) press(a); return; }
   if (!e.repeat && ctl().state.phase === 'over' && (e.key === 'r' || e.key === 'R' || e.code === 'Enter' || e.code === 'Space')) { e.preventDefault(); press('act'); }

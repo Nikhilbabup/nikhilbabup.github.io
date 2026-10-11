@@ -134,7 +134,6 @@ def.ui = {
   title: 'Memory Match', lead: 'Sixteen cards, eight pairs from around the arcade. Find them all in as few moves, and as little time, as you can.',
   keys: 'Tap / arrows + Space', tap: true,
   keymap: { ArrowLeft: 'left', KeyA: 'left', ArrowRight: 'right', KeyD: 'right', ArrowUp: 'up', KeyW: 'up', ArrowDown: 'down', KeyS: 'down', Space: 'act', Enter: 'act' },
-  pad: [],
   hud: [['pairs', 'Pairs', '/8'], ['moves', 'Moves'], ['time', 'Time', 's'], ['best', 'Best']],
   values: (s, best) => ({ pairs: s.pairs, moves: s.moves, time: Math.floor(s.t / 1000), best }),
   intro: ['Memory Match', 'Tap a card to flip it, or use the arrow keys and Space. Find all eight pairs.'],

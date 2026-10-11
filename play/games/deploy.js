@@ -122,7 +122,6 @@ def.ui = {
   title: 'Deploy Pipeline', lead: 'Get the build through lint, test, build and deploy. Press when the marker is in the green window: miss three times and the build breaks.',
   keys: 'Space / Enter / tap', tap: true,
   keymap: { Space: 'act', Enter: 'act', ArrowUp: 'act' },
-  pad: [['act', 'Ship it!', 'or press Space / Enter']],
   hud: [['score', 'Score'], ['releases', 'Releases'], ['lives', 'Lives'], ['best', 'Best']],
   values: (s, best) => ({ score: s.score, releases: s.releases, lives: hearts(s.lives), best }),
   intro: ['Deploy Pipeline', 'Press Space, Enter or tap when the red marker is inside the green window. Pass all four stages to ship a release.'],

@@ -114,7 +114,6 @@ def.ui = {
   keys: 'Tap / ← → + Space / 1–6', tap: true,
   keymap: { ArrowLeft: 'left', KeyA: 'left', ArrowRight: 'right', KeyD: 'right', Space: 'act', Enter: 'act',
             Digit1: 'h0', Digit2: 'h1', Digit3: 'h2', Digit4: 'h3', Digit5: 'h4', Digit6: 'h5' },
-  pad: [['left', '◀'], ['act', 'Pull!'], ['right', '▶']],
   hud: [['score', 'Score'], ['time', 'Time', 's'], ['pulled', 'Carrots'], ['best', 'Best']],
   values: (s, best) => ({ score: s.score, time: Math.ceil(s.timeLeft / 1000), pulled: s.pulled, best }),
   intro: ['Carrot Harvest', 'Tap a carrot to pull it, or move with ← → and press Space. Keys 1–6 pull a hole directly. 45 seconds.'],

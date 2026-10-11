@@ -97,7 +97,6 @@ def.ui = {
   title: 'Bunny Flap', lead: 'The bunny’s propeller hat only spins when you press. Keep it airborne and thread it between the server racks.',
   keys: 'Space / ↑ / tap', tap: true,
   keymap: { Space: 'act', Enter: 'act', ArrowUp: 'act', KeyW: 'act' },
-  pad: [['act', 'Flap!', 'or press Space / ↑']],
   hud: [['score', 'Racks'], ['best', 'Best']],
   values: (s, best) => ({ score: s.score, best }),
   intro: ['Bunny Flap', 'Press Space, ↑ or tap to flap. Fly through the gaps between the server racks; don’t touch the racks or the ground.'],

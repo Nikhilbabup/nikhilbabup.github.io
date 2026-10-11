@@ -123,7 +123,6 @@ def.ui = {
   title: 'Egg Catch', lead: 'The hens are laying faster than ever. Slide the basket under every egg, grab the golden ones and dodge the rotten ones.',
   keys: '← → / drag / tap', tap: true, drag: true,
   keymap: { ArrowLeft: 'left', KeyA: 'left', ArrowRight: 'right', KeyD: 'right' },
-  pad: [['left', '◀ Left'], ['right', 'Right ▶']],
   hud: [['score', 'Score'], ['lives', 'Lives'], ['caught', 'Eggs'], ['best', 'Best']],
   values: (s, best) => ({ score: s.score, lives: hearts(s.lives), caught: s.caught, best }),
   intro: ['Egg Catch', 'Hold ← → or drag to move the basket. Catch every good egg; three broken eggs and it’s over.'],

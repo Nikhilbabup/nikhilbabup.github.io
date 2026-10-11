@@ -114,17 +114,14 @@
       <span class="view-keys" id="keys"></span>
     </div>
     <div class="stage" id="stage" aria-label="Game">
-      <div class="stage-top">
-        <div class="hud" id="hud" role="group" aria-label="Scoreboard"></div>
-        <button class="full-btn" id="fullBtn" type="button" aria-pressed="false" title="Full screen (F)">⛶ <span>Full screen</span></button>
-      </div>
+      <div class="hud" id="hud" role="group" aria-label="Scoreboard"></div>
       <div class="field" id="field">
         <div class="overlay" id="overlay">
           <h2 id="overlayTitle"></h2>
           <p id="overlayText"></p>
         </div>
+        <button class="full-btn" id="fullBtn" type="button" aria-pressed="false" aria-label="Full screen" title="Full screen (F)"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" shape-rendering="crispEdges"><path d="M1 1h5v2H3v3H1zM10 1h5v5h-2V3h-3zM1 10h2v3h3v2H1zM13 10h2v5h-5v-2h3z" fill="currentColor"/></svg></button>
       </div>
-      <div class="pad" id="pad"></div>
       <p class="sr" id="status" role="status" aria-live="polite"></p>
     </div>
     <section class="card">

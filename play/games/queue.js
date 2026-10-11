@@ -129,7 +129,6 @@ def.ui = {
   title: 'Queue Sorter', lead: 'Requests are piling up at the bunny’s router. Send GETs to the cache, POSTs to the database and 500 errors to the logs.',
   keys: '↑ → ↓ / 1 2 3 / tap', tap: true,
   keymap: { ArrowUp: 'top', KeyW: 'top', Digit1: 'top', ArrowRight: 'mid', KeyD: 'mid', Digit2: 'mid', ArrowDown: 'bot', KeyS: 'bot', Digit3: 'bot' },
-  pad: [['top', '▲ Cache'], ['mid', '▶ DB'], ['bot', '▼ Logs']],
   hud: [['score', 'Score'], ['queue', 'Queue', '/' + QUEUE_MAX], ['lives', 'Lives'], ['best', 'Best']],
   values: (s, best) => ({ score: s.score, queue: s.reqs.length, lives: hearts(s.lives), best }),
   intro: ['Queue Sorter', 'Route the request at the front: ↑ for GET (cache), → for POST (DB), ↓ for 500 errors (logs). Or tap the server.'],
