@@ -56,7 +56,7 @@ const FONT = {
   0: [7, 5, 5, 5, 7], 1: [2, 6, 2, 2, 7], 2: [6, 1, 2, 4, 7], 3: [6, 1, 2, 1, 6], 4: [5, 5, 7, 1, 1],
   5: [7, 4, 6, 1, 6], 6: [3, 4, 6, 5, 2], 7: [7, 1, 2, 2, 2], 8: [2, 5, 2, 5, 2], 9: [2, 5, 3, 1, 6],
   '+': [0, 2, 7, 2, 0], '-': [0, 0, 7, 0, 0], '!': [2, 2, 2, 0, 2], '.': [0, 0, 0, 0, 2], '/': [1, 1, 2, 4, 4],
-  '×': [0, 5, 2, 5, 0], ' ': [0, 0, 0, 0, 0]
+  '×': [0, 5, 2, 5, 0], '?': [6, 1, 2, 0, 2], ':': [0, 2, 0, 2, 0], ' ': [0, 0, 0, 0, 0]
 };
 const textWidth = (str, scale = 1) => (String(str).length * 4 - 1) * scale;
 function text(g, str, x, y, c, { align = 'left', scale = 1 } = {}) {
@@ -131,8 +131,8 @@ function pine(g, r, cx, base, h) {
   }
 }
 const cache = {};
-function backdrop(W, H, ground, { pines = true } = {}) {
-  const key = [W, H, ground, pines].join('x');
+function backdrop(W, H, ground, { pines = true, soil = true } = {}) {
+  const key = [W, H, ground, pines, soil].join('x');
   if (cache[key]) return cache[key];
   const bg = document.createElement('canvas'); bg.width = W; bg.height = H;
   const g = bg.getContext('2d');
@@ -144,7 +144,7 @@ function backdrop(W, H, ground, { pines = true } = {}) {
     g.globalAlpha = 0.45; g.drawImage(layer, 0, 0); g.globalAlpha = 1;
   }
   const r2 = rng(7);
-  for (let x = 0; x < W; x++) {
+  if (soil) for (let x = 0; x < W; x++) {
     px(g, x, ground, C.grass); px(g, x, ground + 1, C.grassD); px(g, x, ground + 2, C.dirtL);
     for (let y = ground + 3; y < H; y++) px(g, x, y, r2() < 0.06 ? C.dirtD : r2() < 0.05 ? C.dirtL : C.dirt);
     if (r2() < 0.45) { const th = 1 + Math.floor(r2() * 3); for (let k = 1; k <= th; k++) px(g, x, ground - k, k === th ? C.grassD : C.grass); }
@@ -204,10 +204,12 @@ function mount(cv, def, opts = {}) {
   const keep = opts.saveBest !== false && !opts.autoplay, bestKey = def.id + 'Best';
   cv.width = def.W; cv.height = def.H;
   const r = def.renderer(cv), held = new Set(), memo = {};
-  let game = def.create(newSeed()), queue = [], overAt = 0, raf = 0, last = 0, now = 0, visible = true, restartTimer = 0;
+  const fresh = () => { const g = def.create(newSeed()); if (opts.autoplay) g.state.demo = true; return g; };   // demo: a game playing itself
+  let game = fresh(), queue = [], overAt = 0, raf = 0, last = 0, now = 0, visible = true, restartTimer = 0;
   let best = keep ? loadBest(bestKey) : 0;
   if (typeof IntersectionObserver !== 'undefined') new IntersectionObserver(es => { visible = es[0].isIntersecting; }).observe(cv);
-  const act = { press: a => queue.push({ type: 'press', a }), tap: (x, y, kind = 'down') => queue.push({ type: 'tap', x, y, kind }) };
+  const act = { press: a => queue.push({ type: 'press', a }), tap: (x, y, kind = 'down') => queue.push({ type: 'tap', x, y, kind }),
+                hold: (a, on) => { if (on) held.add(a); else held.delete(a); } };   // hold: keys a bot keeps down
   const clearMemo = () => Object.keys(memo).forEach(k => delete memo[k]);
 
   function emit(e) {
@@ -221,7 +223,7 @@ function mount(cv, def, opts = {}) {
     if (opts.onEvent) opts.onEvent(e, game.state, best);
   }
   function begin() { game.state.phase = 'play'; emit({ type: 'start' }); }
-  function restart() { game = def.create(newSeed()); queue = []; clearMemo(); if (r.clear) r.clear(); begin(); }
+  function restart() { game = fresh(); queue = []; clearMemo(); if (r.clear) r.clear(); begin(); }
   function tick(dt) {
     const s = game.state;
     if (opts.autoplay && s.phase === 'play' && def.bot) def.bot(s, act, memo);
@@ -252,7 +254,7 @@ function mount(cv, def, opts = {}) {
       else if (opts.autoplay && game.state.phase === 'over') restart();
     },
     stop() { cancelAnimationFrame(raf); raf = 0; clearTimeout(restartTimer); held.clear(); },
-    reset() { game = def.create(newSeed()); queue = []; held.clear(); clearMemo(); if (r.clear) r.clear(); r.render(game.state, now); },
+    reset() { game = fresh(); queue = []; held.clear(); clearMemo(); if (r.clear) r.clear(); r.render(game.state, now); },
     get state() { return game.state; },
     get best() { return best; },
     game: () => game, render: (s, t) => r.render(s, t), frame, tick             // for tests

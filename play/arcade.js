@@ -112,8 +112,26 @@ document.querySelectorAll('[data-preview]').forEach(cv => {
   ctl = G.mount(cv, { saveBest: false, ...G.demo(() => ctl) });
   previews[id] = ctl;
 });
-const startPreviews = () => Object.keys(previews).forEach(id => GAMES[id].demoStart(previews[id]));
-const stopPreviews = () => Object.values(previews).forEach(p => p.stop());
+// Keep the grid light: every card plays for a moment so it settles on a mid-game still frame, then only the card
+// you point at (or focus) keeps playing. On touch screens and with reduced motion the cards stay still.
+const still = matchMedia('(hover: none)').matches || matchMedia('(prefers-reduced-motion: reduce)').matches;
+let warmTimer = 0, pointed = null;
+const playPreview = id => { if (previews[id]) GAMES[id].demoStart(previews[id]); };
+const pausePreview = id => { if (previews[id] && id !== pointed) previews[id].stop(); };
+function startPreviews() {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  Object.keys(previews).forEach(playPreview);
+  clearTimeout(warmTimer);
+  warmTimer = setTimeout(() => Object.keys(previews).forEach(pausePreview), 1500);
+}
+const stopPreviews = () => { clearTimeout(warmTimer); Object.values(previews).forEach(p => p.stop()); };
+if (!still) grid.querySelectorAll('[data-game]').forEach(card => {
+  const id = card.dataset.game;
+  const on = () => { pointed = id; if (!active) playPreview(id); };
+  const off = () => { if (pointed === id) pointed = null; pausePreview(id); };
+  card.addEventListener('pointerenter', on); card.addEventListener('pointerleave', off);
+  card.addEventListener('focus', on); card.addEventListener('blur', off);
+});
 
 /* ---------- the single-game view ---------- */
 const games = {}, canvases = {};
@@ -154,7 +172,7 @@ function open(id) {
   el.hud.innerHTML = G.hud.map(([k, label, unit]) => '<span>' + label + ' <b data-k="' + k + '">0</b>' + (unit || '') + '</span>').join('');
   el.rules.innerHTML = G.rules.map(r => '<li>' + r + '</li>').join('');
   el.keys.textContent = G.keys + ' · F full screen · Esc for all games';
-  field.style.touchAction = G.swipe || G.drag ? 'none' : '';
+  field.style.touchAction = G.swipe || G.drag || G.zones ? 'none' : '';
   el.eyebrow.textContent = 'Bunny Arcade'; el.heading.textContent = G.title; el.lead.textContent = G.lead;
   document.title = G.title + ' · Bunny Arcade';
   if (!games[id]) games[id] = G.mount(cv, {
@@ -228,10 +246,15 @@ function toCanvas(e) {
   return { x: (e.clientX - r.left) * cv.width / r.width, y: (e.clientY - r.top) * cv.height / r.height };
 }
 let swipe = null, dragging = null;
+const zoneHeld = new Map();                          // pointerId -> the action its touch zone is holding
 field.addEventListener('pointerdown', e => {
   if (!active || e.target.closest('.full-btn')) return;   // the full-screen button is not a move
   e.preventDefault();
   const G = GAMES[active];
+  if (G.zones) {                                     // touch zones: hold a third of the field to run, tap one to jump; fingers combine
+    const f = toCanvas(e).x / canvases[active].width, z = G.zones.find(([a, b]) => f >= a && f < b) || G.zones[G.zones.length - 1];
+    zoneHeld.set(e.pointerId, z[2]); press(z[2]); return;
+  }
   if (G.swipe) { swipe = { id: e.pointerId, x: e.clientX, y: e.clientY }; return; }   // decided on release: a swipe or a tap
   if (G.tap) { const p = toCanvas(e); ctl().tap(p.x, p.y); if (G.drag) dragging = e.pointerId; }
   else press('act');
@@ -239,7 +262,9 @@ field.addEventListener('pointerdown', e => {
 field.addEventListener('pointermove', e => {
   if (active && dragging === e.pointerId) { const p = toCanvas(e); ctl().tap(p.x, p.y, 'move'); }
 });
+const releaseZone = e => { if (zoneHeld.has(e.pointerId)) { release(zoneHeld.get(e.pointerId)); zoneHeld.delete(e.pointerId); } };
 addEventListener('pointerup', e => {
+  releaseZone(e);
   if (active && swipe && swipe.id === e.pointerId) {
     const dx = e.clientX - swipe.x, dy = e.clientY - swipe.y;
     if (Math.hypot(dx, dy) > 24) press(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up'));
@@ -247,7 +272,7 @@ addEventListener('pointerup', e => {
   }
   swipe = null; dragging = null;
 });
-addEventListener('pointercancel', () => { swipe = null; dragging = null; });
+addEventListener('pointercancel', e => { releaseZone(e); swipe = null; dragging = null; });
 
 document.addEventListener('keydown', e => {
   if (!active || e.ctrlKey || e.metaKey || e.altKey) return;

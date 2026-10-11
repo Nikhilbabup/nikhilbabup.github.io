@@ -5,10 +5,10 @@
 <script>/* dark mode before first paint (assets/sky.js) */try{var t=localStorage.getItem("theme");if(t==="dark"||(!t&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.dataset.theme="dark"}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bunny Arcade</title>
-<meta name="description" content="Nine pixel-art mini-games starring the bunny, from Catch the Fish and Bug Runner to Deploy Pipeline and Queue Sorter. Plain JavaScript and canvas.">
+<meta name="description" content="Ten pixel-art games starring the bunny, from the Bunny Quest platformer to Catch the Fish, Deploy Pipeline and Queue Sorter. Plain JavaScript and canvas.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Bunny Arcade">
-<meta property="og:description" content="Nine pixel-art mini-games starring the bunny. Pick one and play.">
+<meta property="og:description" content="Ten pixel-art games starring the bunny. Pick one and play.">
 <meta name="theme-color" content="#d3e6de">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 7 12' shape-rendering='crispEdges'%3E%3Crect x='1' y='0' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='3' y='0' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='1' y='1' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='3' y='1' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='1' y='2' width='1' height='1' fill='%23eaa5a0'/%3E%3Crect x='3' y='2' width='1' height='1' fill='%23eaa5a0'/%3E%3Crect x='1' y='3' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='2' y='3' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='3' y='3' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='4' y='3' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='0' y='4' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='1' y='4' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='2' y='4' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='3' y='4' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='4' y='4' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='5' y='4' width='1' height='1' fill='%23d8d2c6'/%3E%3Crect x='0' y='5' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='1' y='5' width='1' height='1' fill='%232f3e3a'/%3E%3Crect x='2' y='5' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='3' y='5' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='4' y='5' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='5' y='5' width='1' height='1' fill='%23d8d2c6'/%3E%3Crect x='0' y='6' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='1' y='6' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='2' y='6' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='3' y='6' width='1' height='1' fill='%23eaa5a0'/%3E%3Crect x='4' y='6' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='5' y='6' width='1' height='1' fill='%23d8d2c6'/%3E%3Crect x='1' y='7' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='2' y='7' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='3' y='7' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='4' y='7' width='1' height='1' fill='%23d8d2c6'/%3E%3Crect x='0' y='8' width='1' height='1' fill='%23e0645a'/%3E%3Crect x='1' y='8' width='1' height='1' fill='%23e0645a'/%3E%3Crect x='2' y='8' width='1' height='1' fill='%23e0645a'/%3E%3Crect x='3' y='8' width='1' height='1' fill='%23e0645a'/%3E%3Crect x='4' y='8' width='1' height='1' fill='%23e0645a'/%3E%3Crect x='5' y='8' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='0' y='9' width='1' height='1' fill='%23e0645a'/%3E%3Crect x='1' y='9' width='1' height='1' fill='%23e0645a'/%3E%3Crect x='2' y='9' width='1' height='1' fill='%23e0645a'/%3E%3Crect x='3' y='9' width='1' height='1' fill='%23e0645a'/%3E%3Crect x='4' y='9' width='1' height='1' fill='%23e0645a'/%3E%3Crect x='0' y='10' width='1' height='1' fill='%23e0645a'/%3E%3Crect x='1' y='10' width='1' height='1' fill='%23e0645a'/%3E%3Crect x='2' y='10' width='1' height='1' fill='%23e0645a'/%3E%3Crect x='3' y='10' width='1' height='1' fill='%23e0645a'/%3E%3Crect x='4' y='10' width='1' height='1' fill='%23d8d2c6'/%3E%3Crect x='1' y='11' width='1' height='1' fill='%23f7f3ec'/%3E%3Crect x='3' y='11' width='1' height='1' fill='%23f7f3ec'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,23 +23,27 @@
 <header class="hero arcade-head">
   <nav>
     <a class="brand" id="arcadeHome" href="arcade.html" aria-label="Bunny Arcade: all games"><svg viewBox="-1 -1 9 14" width="16" height="24" shape-rendering="crispEdges" aria-hidden="true"><rect x="-1" y="-1" width="9" height="14" fill="none"/><rect x="1" y="0" width="1" height="1" fill="#f7f3ec"/><rect x="3" y="0" width="1" height="1" fill="#f7f3ec"/><rect x="1" y="1" width="1" height="1" fill="#f7f3ec"/><rect x="3" y="1" width="1" height="1" fill="#f7f3ec"/><rect x="1" y="2" width="1" height="1" fill="#eaa5a0"/><rect x="3" y="2" width="1" height="1" fill="#eaa5a0"/><rect x="1" y="3" width="1" height="1" fill="#f7f3ec"/><rect x="2" y="3" width="1" height="1" fill="#f7f3ec"/><rect x="3" y="3" width="1" height="1" fill="#f7f3ec"/><rect x="4" y="3" width="1" height="1" fill="#f7f3ec"/><rect x="0" y="4" width="1" height="1" fill="#f7f3ec"/><rect x="1" y="4" width="1" height="1" fill="#f7f3ec"/><rect x="2" y="4" width="1" height="1" fill="#f7f3ec"/><rect x="3" y="4" width="1" height="1" fill="#f7f3ec"/><rect x="4" y="4" width="1" height="1" fill="#f7f3ec"/><rect x="5" y="4" width="1" height="1" fill="#d8d2c6"/><rect x="0" y="5" width="1" height="1" fill="#f7f3ec"/><rect x="1" y="5" width="1" height="1" fill="#2f3e3a"/><rect x="2" y="5" width="1" height="1" fill="#f7f3ec"/><rect x="3" y="5" width="1" height="1" fill="#f7f3ec"/><rect x="4" y="5" width="1" height="1" fill="#f7f3ec"/><rect x="5" y="5" width="1" height="1" fill="#d8d2c6"/><rect x="0" y="6" width="1" height="1" fill="#f7f3ec"/><rect x="1" y="6" width="1" height="1" fill="#f7f3ec"/><rect x="2" y="6" width="1" height="1" fill="#f7f3ec"/><rect x="3" y="6" width="1" height="1" fill="#eaa5a0"/><rect x="4" y="6" width="1" height="1" fill="#f7f3ec"/><rect x="5" y="6" width="1" height="1" fill="#d8d2c6"/><rect x="1" y="7" width="1" height="1" fill="#f7f3ec"/><rect x="2" y="7" width="1" height="1" fill="#f7f3ec"/><rect x="3" y="7" width="1" height="1" fill="#f7f3ec"/><rect x="4" y="7" width="1" height="1" fill="#d8d2c6"/><rect x="0" y="8" width="1" height="1" fill="#e0645a"/><rect x="1" y="8" width="1" height="1" fill="#e0645a"/><rect x="2" y="8" width="1" height="1" fill="#e0645a"/><rect x="3" y="8" width="1" height="1" fill="#e0645a"/><rect x="4" y="8" width="1" height="1" fill="#e0645a"/><rect x="5" y="8" width="1" height="1" fill="#f7f3ec"/><rect x="0" y="9" width="1" height="1" fill="#e0645a"/><rect x="1" y="9" width="1" height="1" fill="#e0645a"/><rect x="2" y="9" width="1" height="1" fill="#e0645a"/><rect x="3" y="9" width="1" height="1" fill="#e0645a"/><rect x="4" y="9" width="1" height="1" fill="#e0645a"/><rect x="0" y="10" width="1" height="1" fill="#e0645a"/><rect x="1" y="10" width="1" height="1" fill="#e0645a"/><rect x="2" y="10" width="1" height="1" fill="#e0645a"/><rect x="3" y="10" width="1" height="1" fill="#e0645a"/><rect x="4" y="10" width="1" height="1" fill="#d8d2c6"/><rect x="1" y="11" width="1" height="1" fill="#f7f3ec"/><rect x="3" y="11" width="1" height="1" fill="#f7f3ec"/></svg>Bunny Arcade</a>
-    <a class="nav-link" href="index.html">Portfolio</a>
+    <div class="nav-right">
+      <a class="nav-link" href="projects/bunny-arcade.html">How it’s built</a>
+      <a class="nav-link" href="index.html">Portfolio</a>
+    </div>
   </nav>
   <div class="hero-content">
     <div class="eyebrow" id="eyebrow">Mini games</div>
     <h1 id="heading">Pick a game</h1>
-    <p class="lead" id="lead">The bunny has nine hobbies. Pick one and play it right here.</p>
+    <p class="lead" id="lead">The bunny has ten hobbies. Pick one and play it right here.</p>
   </div>
 </header>
 
 <main>
   <section id="grid" class="arcade-grid" aria-label="Games">
-    <button class="game-card" type="button" data-game="fish">
-      <span class="preview"><canvas class="game-canvas" data-preview="fish" width="320" height="120" aria-hidden="true"></canvas></span>
+    <button class="game-card featured" type="button" data-game="quest">
+      <span class="preview"><canvas class="game-canvas" data-preview="quest" width="320" height="120" aria-hidden="true"></canvas></span>
       <span class="card-body">
-        <span class="card-title">Catch the Fish</span>
-        <span class="card-text">Hook every bite the moment you see the “!”. 60 seconds, golden fish and sneaky boots.</span>
-        <span class="card-meta"><span>Best <b data-best="fish">0</b></span><span class="play">Play ▶</span></span>
+        <span class="card-badge">New · 3 levels</span>
+        <span class="card-title">Bunny Quest</span>
+        <span class="card-text">A three-level platformer: run, jump, stomp the bugs, bump the ? blocks and grab the flagpole.</span>
+        <span class="card-meta"><span>Best <b data-best="quest">0</b></span><span class="play">Play ▶</span></span>
       </span>
     </button>
     <button class="game-card" type="button" data-game="runner">
@@ -50,20 +54,12 @@
         <span class="card-meta"><span>Best <b data-best="runner">0</b></span><span class="play">Play ▶</span></span>
       </span>
     </button>
-    <button class="game-card" type="button" data-game="carrots">
-      <span class="preview"><canvas class="game-canvas" data-preview="carrots" width="320" height="120" aria-hidden="true"></canvas></span>
+    <button class="game-card" type="button" data-game="fish">
+      <span class="preview"><canvas class="game-canvas" data-preview="fish" width="320" height="120" aria-hidden="true"></canvas></span>
       <span class="card-body">
-        <span class="card-title">Carrot Harvest</span>
-        <span class="card-text">Pull the carrots before they sink back into the field, and leave the bugs alone. 45 seconds.</span>
-        <span class="card-meta"><span>Best <b data-best="carrots">0</b></span><span class="play">Play ▶</span></span>
-      </span>
-    </button>
-    <button class="game-card" type="button" data-game="eggs">
-      <span class="preview"><canvas class="game-canvas" data-preview="eggs" width="320" height="120" aria-hidden="true"></canvas></span>
-      <span class="card-body">
-        <span class="card-title">Egg Catch</span>
-        <span class="card-text">Slide the basket under the hens, grab the golden eggs and dodge the rotten ones.</span>
-        <span class="card-meta"><span>Best <b data-best="eggs">0</b></span><span class="play">Play ▶</span></span>
+        <span class="card-title">Catch the Fish</span>
+        <span class="card-text">Hook every bite the moment you see the “!”. 60 seconds, golden fish and sneaky boots.</span>
+        <span class="card-meta"><span>Best <b data-best="fish">0</b></span><span class="play">Play ▶</span></span>
       </span>
     </button>
     <button class="game-card" type="button" data-game="deploy">
@@ -74,7 +70,24 @@
         <span class="card-meta"><span>Best <b data-best="deploy">0</b></span><span class="play">Play ▶</span></span>
       </span>
     </button>
-    <button class="game-card" type="button" data-game="snake">
+    <h2 class="grid-label" id="moreGames">More games</h2>
+    <button class="game-card more" type="button" data-game="carrots">
+      <span class="preview"><canvas class="game-canvas" data-preview="carrots" width="320" height="120" aria-hidden="true"></canvas></span>
+      <span class="card-body">
+        <span class="card-title">Carrot Harvest</span>
+        <span class="card-text">Pull the carrots before they sink back into the field, and leave the bugs alone. 45 seconds.</span>
+        <span class="card-meta"><span>Best <b data-best="carrots">0</b></span><span class="play">Play ▶</span></span>
+      </span>
+    </button>
+    <button class="game-card more" type="button" data-game="eggs">
+      <span class="preview"><canvas class="game-canvas" data-preview="eggs" width="320" height="120" aria-hidden="true"></canvas></span>
+      <span class="card-body">
+        <span class="card-title">Egg Catch</span>
+        <span class="card-text">Slide the basket under the hens, grab the golden eggs and dodge the rotten ones.</span>
+        <span class="card-meta"><span>Best <b data-best="eggs">0</b></span><span class="play">Play ▶</span></span>
+      </span>
+    </button>
+    <button class="game-card more" type="button" data-game="snake">
       <span class="preview"><canvas class="game-canvas" data-preview="snake" width="320" height="120" aria-hidden="true"></canvas></span>
       <span class="card-body">
         <span class="card-title">Bunny Hop</span>
@@ -82,7 +95,7 @@
         <span class="card-meta"><span>Best <b data-best="snake">0</b></span><span class="play">Play ▶</span></span>
       </span>
     </button>
-    <button class="game-card" type="button" data-game="memory">
+    <button class="game-card more" type="button" data-game="memory">
       <span class="preview"><canvas class="game-canvas" data-preview="memory" width="320" height="120" aria-hidden="true"></canvas></span>
       <span class="card-body">
         <span class="card-title">Memory Match</span>
@@ -90,7 +103,7 @@
         <span class="card-meta"><span>Best <b data-best="memory">0</b></span><span class="play">Play ▶</span></span>
       </span>
     </button>
-    <button class="game-card" type="button" data-game="flap">
+    <button class="game-card more" type="button" data-game="flap">
       <span class="preview"><canvas class="game-canvas" data-preview="flap" width="320" height="120" aria-hidden="true"></canvas></span>
       <span class="card-body">
         <span class="card-title">Bunny Flap</span>
@@ -98,7 +111,7 @@
         <span class="card-meta"><span>Best <b data-best="flap">0</b></span><span class="play">Play ▶</span></span>
       </span>
     </button>
-    <button class="game-card" type="button" data-game="queue">
+    <button class="game-card more" type="button" data-game="queue">
       <span class="preview"><canvas class="game-canvas" data-preview="queue" width="320" height="120" aria-hidden="true"></canvas></span>
       <span class="card-body">
         <span class="card-title">Queue Sorter</span>
@@ -142,6 +155,7 @@
 <script src="play/games/memory.js"></script>
 <script src="play/games/flap.js"></script>
 <script src="play/games/queue.js"></script>
+<script src="play/games/quest.js"></script>
 <script src="play/arcade.js"></script>
 </body>
 </html>

@@ -10,11 +10,11 @@ const LANES = { top: { y: 7, name: 'CACHE' }, mid: { y: 47, name: 'DB' }, bot: {
 function create(seed = 1) {
   const rand = K.rng(seed);
   const s = { phase: 'ready', t: 0, score: 0, routed: 0, lives: LIVES, reqs: [], flying: [], untilNext: 200, wrongAt: -1e9 };
-  const level = () => Math.min(1, s.t / 120000);
+  const level = () => Math.min(1, s.t / 90000);
   function spawn() {
     const r = rand(), type = r < 0.45 ? 'get' : r < 0.8 ? 'post' : 'err';
     s.reqs.push({ type, x: -REQ_W });
-    s.untilNext = (1500 - 1000 * level()) * (0.7 + rand() * 0.6);
+    s.untilNext = (1400 - 1080 * level()) * (0.7 + rand() * 0.6);
   }
   const arrived = () => s.reqs.length && s.reqs[0].x >= FRONT_X - 6;
   function route(lane, ev) {
