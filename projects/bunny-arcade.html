@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>/* dark mode before first paint (assets/sky.js) */try{var t=localStorage.getItem("theme");if(t==="dark"||(!t&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bunny Arcade · Nikhil Babu P</title>
+<meta name="description" content="How I built the Bunny Arcade: ten pixel-art games on a small engine of my own, with deterministic, seeded game logic kept apart from rendering, tested in Node and run in CI. No framework and no dependencies.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bunny Arcade · Nikhil Babu P">
+<meta property="og:description" content="How I built the Bunny Arcade: ten pixel-art games on a small engine of my own, with deterministic, seeded game logic kept apart from rendering, tested in Node and run in CI. No framework and no dependencies.">
+<meta name="theme-color" content="#d3e6de">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 7 9' shape-rendering='crispEdges'%3E%3Cpath fill='%23557f6c' d='M3 0h1v1H3zM2 1h3v1H2zM2 2h3v1H2zM1 3h5v1H1zM2 4h3v1H2zM1 5h5v1H1zM0 6h7v1H0z'/%3E%3Cpath fill='%237fa98e' d='M3 1h1v1H3zM3 3h1v1H3zM3 5h1v1H3z'/%3E%3Cpath fill='%237a4c40' d='M3 7h1v2H3z'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="project.css">
+</head>
+<body>
+
+<header class="hero">
+  <nav>
+    <a href="../index.html" class="brand"><svg viewBox="0 0 7 9" width="14" height="18" shape-rendering="crispEdges" aria-hidden="true"><rect x="3" y="0" width="1" height="1" fill="#557f6c"/><rect x="2" y="1" width="1" height="1" fill="#557f6c"/><rect x="3" y="1" width="1" height="1" fill="#7fa98e"/><rect x="4" y="1" width="1" height="1" fill="#557f6c"/><rect x="2" y="2" width="1" height="1" fill="#557f6c"/><rect x="3" y="2" width="1" height="1" fill="#557f6c"/><rect x="4" y="2" width="1" height="1" fill="#557f6c"/><rect x="1" y="3" width="1" height="1" fill="#557f6c"/><rect x="2" y="3" width="1" height="1" fill="#557f6c"/><rect x="3" y="3" width="1" height="1" fill="#7fa98e"/><rect x="4" y="3" width="1" height="1" fill="#557f6c"/><rect x="5" y="3" width="1" height="1" fill="#557f6c"/><rect x="2" y="4" width="1" height="1" fill="#557f6c"/><rect x="3" y="4" width="1" height="1" fill="#557f6c"/><rect x="4" y="4" width="1" height="1" fill="#557f6c"/><rect x="1" y="5" width="1" height="1" fill="#557f6c"/><rect x="2" y="5" width="1" height="1" fill="#557f6c"/><rect x="3" y="5" width="1" height="1" fill="#7fa98e"/><rect x="4" y="5" width="1" height="1" fill="#557f6c"/><rect x="5" y="5" width="1" height="1" fill="#557f6c"/><rect x="0" y="6" width="1" height="1" fill="#557f6c"/><rect x="1" y="6" width="1" height="1" fill="#557f6c"/><rect x="2" y="6" width="1" height="1" fill="#557f6c"/><rect x="3" y="6" width="1" height="1" fill="#557f6c"/><rect x="4" y="6" width="1" height="1" fill="#557f6c"/><rect x="5" y="6" width="1" height="1" fill="#557f6c"/><rect x="6" y="6" width="1" height="1" fill="#557f6c"/><rect x="3" y="7" width="1" height="1" fill="#7a4c40"/><rect x="3" y="8" width="1" height="1" fill="#7a4c40"/></svg>Nikhil Babu P</a>
+    <div class="nav-right">
+      <a class="nav-link" href="../index.html#projects">All projects</a>
+      <a class="pill" href="../index.html#contact">Contact →</a>
+    </div>
+  </nav>
+  <div class="hero-content">
+    <div class="eyebrow">Personal project · Game engine in plain JavaScript</div>
+    <h1>Bunny Arcade</h1>
+    <p class="lead">Ten pixel-art games built on a small engine I wrote. The game logic is deterministic and seeded, kept apart from rendering, and tested in Node on every push. No framework and no dependencies.</p>
+    <div class="meta"><span>10 games</span><span>0 dependencies</span><span>Tested in CI</span></div>
+  </div>
+  <canvas id="scene" width="320" height="120" aria-hidden="true"></canvas>
+</header>
+
+<main>
+  <section class="card">
+    <h2>The problem</h2>
+    <p>I wanted the portfolio to be memorable, so the bunny from the banners got its own games. But I didn't want a pile of throwaway scripts. The goal was to build them the way I build backend services: small pure units with clear boundaries, deterministic behaviour that tests can pin down, and nothing that needs a framework, a build step or a dependency to run.</p>
+  </section>
+  <section class="card">
+    <h2>What I built</h2>
+    <ul class="dots">
+      <li><b>A shared engine</b> (<code>play/kit.js</code>): one <code>mount()</code> runs any game definition. It owns the frame loop (clamped, never-negative time steps), input from keyboard, touch zones, drags and swipes, best scores, pausing when the game is off-screen or the tab is hidden, and a self-play mode. Each game is a plugin that calls <code>Arcade.register()</code>.</li>
+      <li><b>A pure, deterministic core:</b> every game's rules are a state machine, <code>create(seed)</code> then <code>step(dt, input)</code>, returning events. The random numbers are seeded, so any run can be replayed exactly. The rules never touch the DOM: the same split between domain logic and I/O that I use in backend services.</li>
+      <li><b>Event-driven edges:</b> the logic emits events such as <i>stomp</i>, <i>catch</i> and <i>over</i>. The scoreboard, best-score storage, visual effects and screen-reader announcements all subscribe to them instead of being wired into the rules.</li>
+      <li><b>Platformer physics</b> for Bunny Quest: fixed 8&nbsp;ms sub-steps so nothing tunnels through a tile on a slow device, separate X and Y collision passes, coyote time, jump buffering and variable jump height.</li>
+      <li><b>Bots that double as tests:</b> every game ships a self-playing bot that drives the live previews. The same bots are test oracles: CI checks that the Bunny Quest bot can finish all three levels, so a level change that makes the game unbeatable fails the build.</li>
+      <li><b>Accessible and light:</b> keyboard-first controls, screen-reader status messages, reduced-motion support, and games that stop drawing when nobody can see them.</li>
+      <li><b>Day and night:</b> a shared sky module draws the sunset, moon and stars behind every banner with canvas compositing, in step with a CSS dark-mode transition. Click the sun in the banner above.</li>
+    </ul>
+  </section>
+  <section class="card">
+    <h2>Results</h2>
+    <ul class="dots">
+      <li>Ten games, from a three-level platformer to a deploy-pipeline timing game, in about 2,400 lines of plain JavaScript.</li>
+      <li>26 tests covering rules, physics, scoring and the bots, run with Node's built-in test runner on every push through GitHub Actions, in under a second.</li>
+      <li>No dependencies, no build step: the site is static files from any host.</li>
+    </ul>
+  </section>
+  <section class="card">
+    <h2>Tech stack</h2>
+    <div class="tags"><span>JavaScript</span><span>Canvas 2D</span><span>Node.js test runner</span><span>GitHub Actions</span><span>CSS</span></div>
+  </section>
+  <section class="card try">
+    <h2>Try it</h2>
+    <p>Ten games, each playing itself on the grid until you pick one.</p>
+    <a class="pill" href="../arcade.html">Open the Bunny Arcade →</a>
+  </section>
+
+  <div class="pager">
+    <a href="pravega.html"><small>← Previous</small>Pravega</a>
+    <a class="next" href="finance-house.html"><small>Next →</small>Finance House</a>
+  </div>
+</main>
+
+<footer>© <span id="yr"></span> Nikhil Babu P · Thrissur, Kerala</footer>
+<script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+<script src="../assets/sky.js"></script>
+<script src="../play/kit.js"></script>
+<script src="../play/games/quest.js"></script>
+<script>
+// the banner is Bunny Quest playing itself, under the same sun and moon as the other banners
+(() => {
+  const cv = document.getElementById('scene'), sky = window.Sky ? Sky.place({ x: 290, y: 16 }) : null;
+  const ctl = Arcade.mount(cv, Arcade.defs.quest, { autoplay: true, onFrame: () => { if (sky) Sky.paint(cv.getContext('2d'), sky); } });
+  if (sky) Sky.attach(cv, sky);
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { ctl.render(ctl.state, 0); if (sky) Sky.paint(cv.getContext('2d'), sky); }
+  else ctl.start({ auto: true });
+})();
+</script>
+</body>
+</html>
